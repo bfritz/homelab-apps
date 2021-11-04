@@ -8,3 +8,16 @@
     - ruuvi-bridge.gwifi:9100
     labels:
       job: node-exporter
+      k8s: "false"
+  relabel_configs:
+  # Keeps explicit `instance`, e.g. from file_sd_configs, but drops port from auto-created `instance` values.
+  # Copied from https://stackoverflow.com/a/63414542 .
+  - source_labels: [instance]
+    target_label: __tmp_instance
+    regex: '(.+)'
+    replacement: '${1};'
+  - source_labels: [__tmp_instance, __address__]
+    separator: ''
+    target_label: instance
+    regex: '([^:;]+)((:[0-9]+)?|;(.*))'
+    replacement: '${1}'
