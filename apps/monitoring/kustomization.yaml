@@ -18,3 +18,19 @@ patches:
         additionalScrapeConfigs:
           name: additional-scrape-configs
           key: prometheus-additional.yaml
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: grafana
+        namespace: monitoring
+      spec:
+        template:
+          spec:
+            containers:
+            - name: grafana
+              env:
+              - name: GF_SMTP_ENABLED
+                value: "true"
+              - name: GF_SMTP_HOST
+                value: mail.fewerhassles.com:587
