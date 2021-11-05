@@ -25,6 +25,18 @@ patches:
         additionalScrapeConfigs:
           name: additional-scrape-configs
           key: prometheus-additional.yaml
+
+  - patch: |-
+      apiVersion: monitoring.coreos.com/v1
+      kind: Alertmanager
+      metadata:
+        name: main
+        namespace: monitoring
+      spec:
+        alertmanagerConfigSelector:
+          matchLabels:
+            alertmanagerConfig: active
+
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment

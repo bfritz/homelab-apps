@@ -5,6 +5,8 @@ kind: AlertmanagerConfig
 metadata:
   name: alertmanager-email-brad
   namespace: monitoring
+  labels:
+    alertmanagerConfig: active
 spec:
   route:
       groupBy: ['job']
