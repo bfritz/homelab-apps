@@ -36,6 +36,10 @@ patches:
             containers:
             - name: grafana
               env:
+              - name: GF_ANALYTICS_REPORTING_ENABLED
+                value: "false"
+              - name: GF_CHECK_FOR_UPDATES
+                value: "false"
               - name: GF_SMTP_ENABLED
                 value: "true"
               - name: GF_SMTP_HOST
