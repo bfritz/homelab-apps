@@ -40,6 +40,15 @@ patches:
                 value: "true"
               - name: GF_SMTP_HOST
                 value: mail.fewerhassles.com:587
+              # For Grafana 8.2.x
+              # - name: GF_UNIFIED_ALERTING_ENABLED
+              #   value: "true"
+              # - name: GF_ALERTING_ENABLED # legacy alerts
+              #   value: "false"
+              #
+              # For Grafana 8.1.x
+              - name: GF_FEATURE_TOGGLES_ENABLE
+                value: "ngalert"
               volumeMounts:
               - mountPath: /etc/grafana/provisioning/notifiers
                 name: grafana-notifiers
