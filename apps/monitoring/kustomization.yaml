@@ -6,6 +6,7 @@ metadata:
 resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
   - ./prometheus_extra/additional-scrape-configs.yaml
+  - ./grafana-notifiers-brad.yaml
 
 patches:
   - patch: |-
@@ -34,3 +35,11 @@ patches:
                 value: "true"
               - name: GF_SMTP_HOST
                 value: mail.fewerhassles.com:587
+              volumeMounts:
+              - mountPath: /etc/grafana/provisioning/notifiers
+                name: grafana-notifiers
+                readOnly: false
+            volumes:
+            - name: grafana-notifiers
+              configMap:
+                name: grafana-notifiers-brad

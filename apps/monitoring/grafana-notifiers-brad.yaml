@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-notifiers-brad
+  namespace: monitoring
+data:
+  brad.yaml: |
+    apiVersion: 1
+    notifiers:
+    - name: "Brad - Email"
+      type: email
+      org_id: 1
+      uid: brad-email
+      is_default: true
+      send_reminder: true
+      frequency: 30m
+      settings:
+        addresses: brad-k8s-alerts-rqH3@fewerhassles.com
+        uploadImage: true
