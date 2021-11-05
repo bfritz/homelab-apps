@@ -11,7 +11,7 @@ resources:
 images:
   - name: grafana/grafana
     newTag:
-    digest: sha256:f9139cfb93732c7b2e65c2c3d7fa240139501551d83bd5b94e5d6f2ccfa9cd7c # 8.1.7 for linux/amd64
+    digest: sha256:d6325d20f78cd306b4f8a9d0057ea7022a34d273553034d3d871040c3db37fc3 # 8.2.3 for linux/amd64
 
 patches:
   - patch: |-
@@ -40,19 +40,14 @@ patches:
                 value: "false"
               - name: GF_CHECK_FOR_UPDATES
                 value: "false"
+              - name: GF_UNIFIED_ALERTING_ENABLED
+                value: "true"
+              - name: GF_ALERTING_ENABLED # legacy alerts
+                value: "false"
               - name: GF_SMTP_ENABLED
                 value: "true"
               - name: GF_SMTP_HOST
                 value: mail.fewerhassles.com:587
-              # For Grafana 8.2.x
-              # - name: GF_UNIFIED_ALERTING_ENABLED
-              #   value: "true"
-              # - name: GF_ALERTING_ENABLED # legacy alerts
-              #   value: "false"
-              #
-              # For Grafana 8.1.x
-              - name: GF_FEATURE_TOGGLES_ENABLE
-                value: "ngalert"
               volumeMounts:
               - mountPath: /etc/grafana/provisioning/notifiers
                 name: grafana-notifiers
