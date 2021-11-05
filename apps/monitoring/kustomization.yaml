@@ -8,6 +8,11 @@ resources:
   - ./prometheus_extra/additional-scrape-configs.yaml
   - ./grafana-notifiers-brad.yaml
 
+images:
+  - name: grafana/grafana
+    newTag:
+    digest: sha256:f9139cfb93732c7b2e65c2c3d7fa240139501551d83bd5b94e5d6f2ccfa9cd7c # 8.1.7 for linux/amd64
+
 patches:
   - patch: |-
       apiVersion: monitoring.coreos.com/v1
