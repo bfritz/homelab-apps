@@ -1,0 +1,19 @@
+# https://github.com/prometheus-operator/prometheus-operator/blob/v0.52.0/Documentation/user-guides/alerting.md
+# https://prometheus-operator.dev/docs/operator/api/#alertmanagerconfigspec
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanager-email-brad
+  namespace: monitoring
+spec:
+  route:
+      groupBy: ['job']
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 2h
+      receiver: 'email-brad'
+  receivers:
+  - name: 'email-brad'
+    emailConfigs:
+    - to: "Brad <brad-k8s-alerts-9DrY@fewerhassles.com>"
+      smarthost: "mail.fewerhassles.com:587"
