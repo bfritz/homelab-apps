@@ -4,11 +4,13 @@
 
 kustomize_apps = $(sort $(dir $(wildcard apps/*/kustomization.yaml)))
 
-lint: $(kustomize_apps)
-	$(eval tmpdir := $(shell mktemp -d))
-	$(info Linting $? ...)
-	kubectl kustomize -o $(tmpdir) $?
-	@rm -r $(tmpdir)
+lint:
+	@for app in $(kustomize_apps); do \
+		echo Linting $$app ...; \
+		tmpdir=$$(mktemp -d); \
+		kubectl kustomize -o $$tmpdir $$app; \
+		rm -rf $$tmpdir; \
+	done
 
 
 __end:
