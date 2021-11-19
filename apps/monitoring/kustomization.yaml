@@ -5,9 +5,12 @@ metadata:
 
 resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
-  - ./prometheus_extra/additional-scrape-configs.yaml
-  - ./grafana-notifiers-brad.yaml
   - ./alertmanager-email-brad.yaml
+  - ./alertmanager-ingress.yaml
+  - ./grafana-ingress.yaml
+  - ./grafana-notifiers-brad.yaml
+  - ./prometheus-ingress.yaml
+  - ./prometheus_extra/additional-scrape-configs.yaml
 
 images:
   - name: grafana/grafana
