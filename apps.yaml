@@ -22,3 +22,7 @@ spec:
         repoURL: https://github.com/bfritz/homelab-apps.git
         targetRevision: HEAD
         path: '{{path}}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+        - CreateNamespace=true
