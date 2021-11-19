@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed
+    cert-manager.io/common-name: argocd.k8s
+    kubernetes.io/ingress.class: haproxy
+  name: argocd
+  namespace: argocd
+spec:
+  tls:
+  - secretName: argocd-tls
+    hosts:
+    - argocd.k8s
+  rules:
+  - host: argocd.k8s
+    http:
+      paths:
+      - backend:
+          service:
+            name: argocd-server
+            port:
+              number: 443
+        path: /
+        pathType: Prefix
