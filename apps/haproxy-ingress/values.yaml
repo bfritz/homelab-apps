@@ -1,0 +1,11 @@
+controller:
+  stats:
+    enabled: true
+    port: 1936
+  metrics:
+    enabled: true
+    embedded: true
+  serviceMonitor:
+    enabled: true
+  logs: # access logs
+    enabled: true
