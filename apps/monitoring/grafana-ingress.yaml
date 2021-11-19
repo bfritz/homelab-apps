@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed
+    cert-manager.io/common-name: grafana.k8s
+    kubernetes.io/ingress.class: haproxy
+  name: grafana
+  namespace: monitoring
+spec:
+  tls:
+  - secretName: grafana-tls
+    hosts:
+    - grafana.k8s
+  rules:
+  - host: grafana.k8s
+    http:
+      paths:
+      - backend:
+          service:
+            name: grafana
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix

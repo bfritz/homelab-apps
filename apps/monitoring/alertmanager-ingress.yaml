@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed
+    cert-manager.io/common-name: alertmanager.k8s
+    kubernetes.io/ingress.class: haproxy
+  name: alertmanager
+  namespace: monitoring
+spec:
+  tls:
+  - secretName: grafana-tls
+    hosts:
+    - alertmanager.k8s
+  rules:
+  - host: alertmanager.k8s
+    http:
+      paths:
+      - backend:
+          service:
+            name: alertmanager-main
+            port:
+              number: 9093
+        path: /
+        pathType: Prefix
