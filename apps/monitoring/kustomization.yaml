@@ -75,3 +75,26 @@ patches:
             - name: grafana-notifiers
               configMap:
                 name: grafana-notifiers-brad
+
+  - path: blackbox-exporter-configuration.yaml
+    target:
+      name: blackbox-exporter-configuration
+      kind: ConfigMap
+
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: blackbox-exporter
+        namespace: monitoring
+      spec:
+        template:
+          spec:
+            containers:
+            - name: blackbox-exporter
+              securityContext:
+                runAsUser: 0 # to override the default of 65534 (nobody)
+                runAsNonRoot: false
+                capabilities:
+                  drop: ["ALL"]
+                  add: ["NET_RAW"]
