@@ -1,0 +1,15 @@
+kind: Probe
+apiVersion: monitoring.coreos.com/v1
+metadata:
+  name: key-public-ips
+  namespace: monitoring
+spec:
+  interval: 60s
+  module: icmp
+  prober:
+    url: blackbox-exporter.monitoring.svc.cluster.local:19115
+  targets:
+    staticConfig:
+      static:
+      - 1.1.1.1
+      - 8.8.8.8
