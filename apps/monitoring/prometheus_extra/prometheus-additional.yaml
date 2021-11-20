@@ -3,7 +3,7 @@
   metrics_path: /metrics
   static_configs:
   - targets:
-    - rpi-fw.carmel:9100
+    - rpi-fw:9100
     - k0s-controller.k8s:9100
     - ruuvi-bridge.gwifi:9100
     labels:
