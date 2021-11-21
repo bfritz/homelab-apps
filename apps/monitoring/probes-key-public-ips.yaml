@@ -4,7 +4,7 @@ metadata:
   name: key-public-ips
   namespace: monitoring
 spec:
-  interval: 60s
+  interval: 5s
   module: icmp
   prober:
     url: blackbox-exporter.monitoring.svc.cluster.local:19115
