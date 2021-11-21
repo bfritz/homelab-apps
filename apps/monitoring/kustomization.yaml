@@ -7,8 +7,8 @@ resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
   - ./alertmanager-email-brad.yaml
   - ./alertmanager-ingress.yaml
+  - ./grafana-dashboards-app.yaml
   - ./grafana-ingress.yaml
-  - ./grafana-monitoring-dashboards-namespace.yaml
   - ./grafana-monitoring-dashboards-view-role.yaml
   - ./grafana-notifiers-brad.yaml
   - ./grafana-rolebinding.yaml
