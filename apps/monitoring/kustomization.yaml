@@ -17,6 +17,8 @@ images:
   - name: grafana/grafana
     newTag:
     digest: sha256:d6325d20f78cd306b4f8a9d0057ea7022a34d273553034d3d871040c3db37fc3 # 8.2.3 for linux/amd64
+  - name: kiwigrid/k8s-sidecar
+    digest: sha256:35654389f8a9b7816193a4811cf3ceb6cf309ece8874e84b3d2d8399e618059b # 1.14.2
 
 patches:
   - patch: |-
@@ -68,14 +70,38 @@ patches:
               - name: GF_SMTP_HOST
                 value: mail.fewerhassles.com:587
               volumeMounts:
-              - mountPath: /etc/grafana/provisioning/notifiers
-                name: grafana-notifiers
+              - name: grafana-notifiers
+                mountPath: /etc/grafana/provisioning/notifiers
                 readOnly: false
+              - name: sc-dashboard-volume
+                mountPath: "/grafana-dashboard-definitions/cm"
+            - name: grafana-sc-dashboard
+              image: "kiwigrid/k8s-sidecar"
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: METHOD
+                  value: "WATCH"
+                - name: LABEL
+                  value: "grafana_dashboard"
+                - name: FOLDER
+                  value: "/tmp/dashboards"
+                - name: RESOURCE
+                  value: "configmap"
+                - name: NAMESPACE
+                  value: "monitoring"
+                - name: UNIQUE_FILENAMES
+                  value: "true"
+              volumeMounts:
+              - name: sc-dashboard-volume
+                mountPath: "/tmp/dashboards"
             volumes:
             - name: grafana-notifiers
               configMap:
                 name: grafana-notifiers-brad
+            - name: sc-dashboard-volume
+              emptyDir: {}
 
+  # enable ICMP for blackbox-exporter
   - path: blackbox-exporter-configuration.yaml
     target:
       name: blackbox-exporter-configuration
@@ -98,3 +124,9 @@ patches:
                 capabilities:
                   drop: ["ALL"]
                   add: ["NET_RAW"]
+
+  # add supplemental grafana dashboard provider for ConfigMap backed dashboards
+  - path: grafana-dashboards-configuration.yaml
+    target:
+      name: grafana-dashboards
+      kind: ConfigMap
