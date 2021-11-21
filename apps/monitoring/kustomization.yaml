@@ -8,7 +8,10 @@ resources:
   - ./alertmanager-email-brad.yaml
   - ./alertmanager-ingress.yaml
   - ./grafana-ingress.yaml
+  - ./grafana-monitoring-dashboards-namespace.yaml
+  - ./grafana-monitoring-dashboards-view-role.yaml
   - ./grafana-notifiers-brad.yaml
+  - ./grafana-rolebinding.yaml
   - ./probes-key-public-ips.yaml
   - ./prometheus-ingress.yaml
   - ./prometheus_extra/additional-scrape-configs.yaml
@@ -88,7 +91,7 @@ patches:
                 - name: RESOURCE
                   value: "configmap"
                 - name: NAMESPACE
-                  value: "monitoring"
+                  value: "monitoring-dashboards"
                 - name: UNIQUE_FILENAMES
                   value: "true"
               volumeMounts:
