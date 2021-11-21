@@ -8,9 +8,20 @@ metadata:
 data:
   sample.json: |-
     {
-      "__inputs": [
-      ],
+      "__inputs": [],
       "__requires": [
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "8.2.3"
+        },
+        {
+          "type": "panel",
+          "id": "text",
+          "name": "Text",
+          "version": ""
+        }
       ],
       "annotations": {
         "list": [
@@ -21,6 +32,12 @@ data:
             "hide": true,
             "iconColor": "rgba(0, 211, 255, 1)",
             "name": "Annotations & Alerts",
+            "target": {
+              "limit": 100,
+              "matchAny": false,
+              "tags": [],
+              "type": "dashboard"
+            },
             "type": "dashboard"
           }
         ]
@@ -30,7 +47,7 @@ data:
       "fiscalYearStartMonth": 0,
       "gnetId": null,
       "graphTooltip": 0,
-      "id": 27,
+      "id": null,
       "links": [],
       "liveNow": false,
       "panels": [
