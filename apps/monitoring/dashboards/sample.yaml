@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-sample
+  namespace: monitoring-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+  sample.json: |-
+    {
+      "__inputs": [
+      ],
+      "__requires": [
+      ],
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": "-- Grafana --",
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "description": "Sample of custom dashboard.",
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "gnetId": null,
+      "graphTooltip": 0,
+      "id": 27,
+      "links": [],
+      "liveNow": false,
+      "panels": [
+        {
+          "datasource": null,
+          "description": "",
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 0
+          },
+          "id": 2,
+          "options": {
+            "content": "Sample of custom dashboard for [bfritz/homelab-apps].\n\nSource at https://github.com/bfritz/homelab-apps/tree/main/apps/monitoring/dashboards/sample.yaml .\n\n[bfritz/homelab-apps]: https://github.com/bfritz/homelab-apps",
+            "mode": "markdown"
+          },
+          "pluginVersion": "8.2.3",
+          "type": "text"
+        }
+      ],
+      "schemaVersion": 31,
+      "style": "dark",
+      "tags": [],
+      "templating": {
+        "list": []
+      },
+      "time": {
+        "from": "now-6h",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "",
+      "title": "Sample Dashboard",
+      "uid": "zu8EeWi1k",
+      "version": 1
+    }
