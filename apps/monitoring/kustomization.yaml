@@ -17,9 +17,6 @@ resources:
   - ./prometheus_extra/additional-scrape-configs.yaml
 
 images:
-  - name: grafana/grafana
-    newTag:
-    digest: sha256:d6325d20f78cd306b4f8a9d0057ea7022a34d273553034d3d871040c3db37fc3 # 8.2.3 for linux/amd64
   - name: kiwigrid/k8s-sidecar
     digest: sha256:35654389f8a9b7816193a4811cf3ceb6cf309ece8874e84b3d2d8399e618059b # 1.14.2
 
