@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 metadata:
-  name: monitoring
+  name: sealed-secrets
 
 resources:
   # Vendor the manifest from https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/controller.yaml
