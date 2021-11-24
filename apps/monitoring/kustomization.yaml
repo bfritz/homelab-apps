@@ -12,6 +12,7 @@ resources:
   - ./grafana-monitoring-dashboards-view-role.yaml
   - ./grafana-notifiers-brad.yaml
   - ./grafana-rolebinding.yaml
+  - ./probes-internal-ips.yaml
   - ./probes-key-public-ips.yaml
   - ./prometheus-ingress.yaml
   - ./prometheus-storage.yaml
