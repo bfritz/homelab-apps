@@ -14,7 +14,7 @@ spec:
       groupWait: 30s
       groupInterval: 5m
       repeatInterval: 2h
-      receiver: 'email-brad'
+      receiver: EmailBrad
   receivers:
   - name: EmailBrad
     emailConfigs:
