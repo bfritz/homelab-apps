@@ -103,7 +103,7 @@ patches:
             - name: sc-dashboard-volume
               emptyDir: {}
 
-  # enable ICMP for blackbox-exporter
+  # enable ICMP for blackbox-exporter and increase CPU limits
   - path: blackbox-exporter-configuration.yaml
     target:
       name: blackbox-exporter-configuration
@@ -120,6 +120,9 @@ patches:
           spec:
             containers:
             - name: blackbox-exporter
+              resources:
+                limits:
+                  cpu: 50m
               securityContext:
                 runAsUser: 0 # to override the default of 65534 (nobody)
                 runAsNonRoot: false
