@@ -19,4 +19,5 @@ spec:
   - name: EmailBrad
     emailConfigs:
     - to: "Brad <brad-k8s-alerts-9DrY@fewerhassles.com>"
+      from: Alertmanager <alertmanager@alertmanager.k8s>
       smarthost: "mail.fewerhassles.com:587"
