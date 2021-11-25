@@ -9,7 +9,7 @@ metadata:
   namespace: monitoring
 spec:
   tls:
-  - secretName: grafana-tls
+  - secretName: alertmanager-tls
     hosts:
     - alertmanager.k8s
   rules:
