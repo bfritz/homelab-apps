@@ -1,0 +1,50 @@
+# By default, kube-prometheus RBAC rules allow monitoring in the `monitoring`,
+# `default`, and `kube-system` namespace.  To support `ServiceMonitor`s in
+# the `haproxy-ingress` namespace, we need an additional role and binding in
+# that namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-k8s
+  namespace: haproxy-ingress
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: monitoring
+roleRef:
+  name: prometheus-k8s
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-k8s
+  namespace: haproxy-ingress
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
