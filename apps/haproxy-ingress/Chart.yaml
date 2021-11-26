@@ -3,7 +3,7 @@ name: haproxy-ingress
 description: haproxy ingress controller
 
 type: application
-version: 13.4.0
+version: 13.4.1
 
 appVersion: "v0.13.4"
 
