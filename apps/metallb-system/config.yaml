@@ -10,3 +10,7 @@ data:
       protocol: layer2
       addresses:
       - 172.22.18.32/27
+    - name: public-pool
+      protocol: layer2
+      addresses:
+      - 172.22.18.64/27

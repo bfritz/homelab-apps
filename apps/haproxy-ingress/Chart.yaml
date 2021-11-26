@@ -9,5 +9,10 @@ appVersion: "v0.13.4"
 
 dependencies:
 - name: haproxy-ingress
+  alias: haproxy-ingress-private
+  version: 0.13.4
+  repository: https://haproxy-ingress.github.io/charts
+- name: haproxy-ingress
+  alias: haproxy-ingress-public
   version: 0.13.4
   repository: https://haproxy-ingress.github.io/charts
