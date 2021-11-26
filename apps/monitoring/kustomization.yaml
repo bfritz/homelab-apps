@@ -7,6 +7,11 @@ resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
   - ./alertmanager-email-brad.yaml
   - ./alertmanager-ingress.yaml
+  - ./gotify-deployment.yaml
+  - ./gotify-ingress.yaml
+  - ./gotify-service.yaml
+  - ./gotify-serviceaccount.yaml
+  - ./gotify-storage.yaml
   - ./grafana-dashboards-app.yaml
   - ./grafana-ingress.yaml
   - ./grafana-monitoring-dashboards-view-role.yaml
@@ -20,6 +25,8 @@ resources:
   - ./prometheus_extra/additional-scrape-configs.yaml
 
 images:
+  - name: gotify/server
+    digest: sha256:57aa2aabac035c16118f625dd6d3d2c3ca421b43b28cb27512f3212193d65771 # 2.1.0
   - name: kiwigrid/k8s-sidecar
     digest: sha256:35654389f8a9b7816193a4811cf3ceb6cf309ece8874e84b3d2d8399e618059b # 1.14.2
 
