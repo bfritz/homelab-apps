@@ -4,7 +4,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: self-signed
     cert-manager.io/common-name: alertmanager.k8s
-    kubernetes.io/ingress.class: haproxy
+    kubernetes.io/ingress.class: haproxy-private
   name: alertmanager
   namespace: monitoring
 spec:

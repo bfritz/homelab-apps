@@ -6,7 +6,7 @@ metadata:
 data:
   config: |
     address-pools:
-    - name: default
+    - name: private-pool
       protocol: layer2
       addresses:
       - 172.22.18.32/27

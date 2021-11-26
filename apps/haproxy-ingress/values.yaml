@@ -1,4 +1,7 @@
 controller:
+  ingressClass: haproxy-private
+  service:
+    loadBalancerIP: 172.22.18.32
   stats:
     enabled: true
     port: 1936
