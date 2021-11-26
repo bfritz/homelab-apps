@@ -14,6 +14,7 @@ resources:
   - ./grafana-rolebinding.yaml
   - ./probes-internal-ips.yaml
   - ./probes-key-public-ips.yaml
+  - ./prometheus-haproxy-ingress-servicemonitor.yaml
   - ./prometheus-ingress.yaml
   - ./prometheus-storage.yaml
   - ./prometheus_extra/additional-scrape-configs.yaml
