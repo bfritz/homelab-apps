@@ -1,14 +1,15 @@
-controller:
-  ingressClass: haproxy-private
-  service:
-    loadBalancerIP: 172.22.18.32
-  stats:
-    enabled: true
-    port: 1936
-  metrics:
-    enabled: true
-    embedded: true
-  serviceMonitor:
-    enabled: true
-  logs: # access logs
-    enabled: true
+haproxy-ingress:
+  controller:
+    ingressClass: haproxy-private
+    service:
+      loadBalancerIP: 172.22.18.32
+    stats:
+      enabled: true
+      port: 1936
+    metrics:
+      enabled: true
+      embedded: true
+    serviceMonitor:
+      enabled: true
+    logs: # access logs
+      enabled: true
