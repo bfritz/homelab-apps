@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: self-signed
+    cert-manager.io/common-name: gotify.k8s
+    kubernetes.io/ingress.class: haproxy-public
+  name: gotify
+  namespace: monitoring
+spec:
+  tls:
+  - secretName: gotify-tls
+    hosts:
+    - gotify.k8s
+  rules:
+  - host: gotify.k8s
+    http:
+      paths:
+      - backend:
+          service:
+            name: gotify
+            port:
+              name: http
+        path: /
+        pathType: Prefix
