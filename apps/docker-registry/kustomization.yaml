@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: docker-registry
+
+resources:
+  - ./namespace.yaml
+  - ./deployment.yaml
+  - ./ingress.yaml
+  - ./service.yaml
+  - ./serviceaccount.yaml
+  - ./storage.yaml
+
+images:
+  - name: registry
+    digest: sha256:36cb5b157911061fb610d8884dc09e0b0300a767a350563cbfd88b4b85324ce4 # 2.7.1
