@@ -16,6 +16,19 @@ spec:
       containers:
       - name: docker-registry
         image: registry
+        env:
+        - name: REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+          value: /var/lib/registry
+        - name: REGISTRY_LOG_ACCESSLOG_DISABLED
+          value: "false"
+        - name: REGISTRY_LOG_FORMATTER
+          value: "json"
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_ENABLED
+          value: "true"
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_INTERVAL
+          value: "10s"
+        - name: REGISTRY_HEALTH_STORAGEDRIVER_THRESHOLD
+          value: "3"
         ports:
         - containerPort: 5000
           name: registry-http
