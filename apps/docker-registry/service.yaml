@@ -5,10 +5,10 @@ metadata:
   namespace: docker-registry
 spec:
   ports:
-  - name: registry-http
+  - name: http-registry
     port: 5000
     protocol: TCP
-    targetPort: registry-http
+    targetPort: http-registry
   selector:
     app.kubernetes.io/name: docker-registry
   type: ClusterIP

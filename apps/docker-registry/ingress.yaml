@@ -20,6 +20,6 @@ spec:
           service:
             name: docker-registry
             port:
-              name: registry-http
+              name: http-registry
         path: /
         pathType: Prefix

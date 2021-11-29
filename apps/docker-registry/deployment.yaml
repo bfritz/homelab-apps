@@ -31,7 +31,7 @@ spec:
           value: "3"
         ports:
         - containerPort: 5000
-          name: registry-http
+          name: http-registry
         resources:
           limits:
             cpu: 200m
