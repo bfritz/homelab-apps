@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: timescaledb
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9187"
+spec:
+  ports:
+  - name: metrics
+    port: 9187
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: timescaledb
+  type: ClusterIP

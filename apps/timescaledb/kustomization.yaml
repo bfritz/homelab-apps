@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: timescaledb
+
+resources:
+  - ./namespace.yaml
+  - ./db-service.yaml
+  - ./exporter-service.yaml
+  - ./postgres-admin-password.yaml
+  - ./statefulset.yaml
+  - ./serviceaccount.yaml
+  - ./storage.yaml
+
+images:
+  - name: timescale/timescaledb
+    digest: sha256:cfc894276829c8841fac11128c1b4b52c890c6104b06c50830471e6417901619 # 2.5.0-pg14 (for amd64)
+  - name: wrouesnel/postgres_exporter
+    digest: sha256:520fcd04d6c8f922d800d89ae96c021f4afd22e376c4b88260a8b780e3375dbe # v0.8.0 (for amd64)

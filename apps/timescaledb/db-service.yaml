@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: timescaledb
+  namespace: timescaledb
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+spec:
+  ports:
+  - name: postgresql
+    port: 5432
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: timescaledb
+  type: LoadBalancer
+  loadBalancerIP: 172.22.18.54
