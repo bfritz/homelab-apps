@@ -44,6 +44,7 @@ patches:
         additionalScrapeConfigs:
           name: additional-scrape-configs
           key: prometheus-additional.yaml
+        externalUrl: https://prometheus.k8s
 
   - patch: |-
       apiVersion: monitoring.coreos.com/v1
@@ -55,6 +56,7 @@ patches:
         alertmanagerConfigSelector:
           matchLabels:
             alertmanagerConfig: active
+        externalUrl: https://alertmanager.k8s
 
   - patch: |-
       apiVersion: apps/v1
