@@ -116,6 +116,22 @@ patches:
             - name: sc-dashboard-volume
               emptyDir: {}
 
+  # bump CPU allotment for RBAC proxy on kube-state-metrics to avoid throttling (and Alertmanager alerts)
+  - patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: kube-state-metrics
+        namespace: monitoring
+      spec:
+        template:
+          spec:
+            containers:
+            - name: kube-rbac-proxy-main
+              resources:
+                limits:
+                  cpu: 80m
+
   # enable ICMP for blackbox-exporter and increase CPU limits
   - path: blackbox-exporter-configuration.yaml
     target:
