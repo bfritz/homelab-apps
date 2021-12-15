@@ -84,6 +84,10 @@ patches:
                 value: "true"
               - name: GF_SMTP_HOST
                 value: mail.fewerhassles.com:587
+              # bump CPU allotment for grafana container to avoid throttling (and Alertmanager alerts)
+              resources:
+                limits:
+                  cpu: 300m
               volumeMounts:
               - name: grafana-notifiers
                 mountPath: /etc/grafana/provisioning/notifiers
@@ -116,7 +120,6 @@ patches:
             - name: sc-dashboard-volume
               emptyDir: {}
 
-  # bump CPU allotment for RBAC proxy on kube-state-metrics to avoid throttling (and Alertmanager alerts)
   - patch: |-
       apiVersion: apps/v1
       kind: Deployment
@@ -128,6 +131,7 @@ patches:
           spec:
             containers:
             - name: kube-rbac-proxy-main
+              # bump CPU allotment for RBAC proxy on kube-state-metrics to avoid throttling (and Alertmanager alerts)
               resources:
                 limits:
                   cpu: 80m
