@@ -28,8 +28,6 @@ resources:
 images:
   - name: gotify/server
     digest: sha256:57aa2aabac035c16118f625dd6d3d2c3ca421b43b28cb27512f3212193d65771 # 2.1.0
-  - name: grafana/grafana
-    digest: sha256:33f97b0a5c1e43813cae0cd9a106bb6ff46e3c965586ecb6ed2fb0117a397e18 # 8.3.2 on amd64
   - name: kiwigrid/k8s-sidecar
     digest: sha256:35654389f8a9b7816193a4811cf3ceb6cf309ece8874e84b3d2d8399e618059b # 1.14.2
 
