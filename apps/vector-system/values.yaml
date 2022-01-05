@@ -1,0 +1,105 @@
+# Aggregator Config
+vector-aggregator:
+  role: Aggregator
+  persistence:
+    enabled: true
+    existingClaim: vector-aggregator-data-claim
+  extraVolumes:
+    - name: vector-log-data
+      persistentVolumeClaim:
+        claimName: vector-log-data-claim
+  extraVolumeMounts:
+    - name: vector-log-data
+      mountPath: /logs
+  podSecurityContext:
+    runAsUser: 2001
+    runAsGroup: 2001
+    fsGroup: 2001
+    fsGroupChangePolicy: OnRootMismatch
+  customConfig:
+    data_dir: /vector-data-dir
+    api:
+      enabled: true
+      address: 127.0.0.1:8686
+      playground: false
+    sources:
+      datadog_agent:
+        address: 0.0.0.0:8282
+        type: datadog_agent
+      fluent:
+        address: 0.0.0.0:24224
+        type: fluent
+      internal_metrics:
+        type: internal_metrics
+      logstash:
+        address: 0.0.0.0:5044
+        type: logstash
+      splunk_hec:
+        address: 0.0.0.0:8080
+        type: splunk_hec
+      statsd:
+        address: 0.0.0.0:8125
+        mode: tcp
+        type: statsd
+      syslog:
+        address: 0.0.0.0:9000
+        mode: tcp
+        type: syslog
+      vector:
+        address: 0.0.0.0:6000
+        type: vector
+        version: "2"
+    sinks:
+      prom_exporter:
+        type: prometheus_exporter
+        inputs: [internal_metrics]
+        address: 0.0.0.0:9090
+      to_disk:
+        type: file
+        path: |-
+          {{ "/logs/%Y-%m/%Y-%m-%d_{{ kubernetes.pod_namespace }}.log" }}
+        inputs: [datadog_agent, fluent, logstash, splunk_hec, syslog, vector]
+        encoding:
+          codec: ndjson
+
+# Agent Config
+vector-agent:
+  role: Agent
+  podSecurityContext:
+    runAsUser: 0
+    runAsGroup: 0
+  securityContext:
+    # run as root to access /proc, /sys, /var/log, etc but drop all capabilities
+    capabilities:
+      drop:
+        - all
+  customConfig:
+    data_dir: /vector-data-dir
+    api:
+      enabled: true
+      address: 127.0.0.1:8686
+      playground: false
+    sources:
+      kubernetes_logs:
+        type: kubernetes_logs
+      host_metrics:
+        filesystem:
+          devices:
+            excludes: [binfmt_misc]
+          filesystems:
+            excludes: [binfmt_misc]
+          mountPoints:
+            excludes: ["*/proc/sys/fs/binfmt_misc"]
+        type: host_metrics
+      internal_metrics:
+        type: internal_metrics
+    sinks:
+      prom_exporter:
+        type: prometheus_exporter
+        inputs: [host_metrics, internal_metrics]
+        address: 0.0.0.0:9090
+      aggregator:
+        type: vector
+        address: "app-vector-system-vector-aggregator:6000"
+        inputs: [kubernetes_logs]
+        version: "2"
