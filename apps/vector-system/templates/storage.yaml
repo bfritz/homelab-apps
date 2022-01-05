@@ -1,0 +1,63 @@
+# storage for JSON logs collected by aggregator
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vector-log-data-claim
+spec:
+  volumeName: vector-log-data
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vector-log-data
+  labels:
+    app: vector
+    component: aggregator
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/vector/logs"
+  mountOptions:
+    - nfsvers=4.2
+
+
+---
+# storage for aggregator's internal persistence
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vector-aggregator-data-claim
+spec:
+  volumeName: vector-aggregator-data
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vector-aggregator-data
+  labels:
+    app: vector
+    component: aggregator
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/vector/aggregator-data"
+  mountOptions:
+    - nfsvers=4.2
