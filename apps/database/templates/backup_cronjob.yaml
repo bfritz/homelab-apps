@@ -1,0 +1,39 @@
+# hourly backup of pg12 database to NAS volume
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg12-backup
+spec:
+  schedule: "12 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 36
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          containers:
+          - name: pg12-backup
+            image: bitnami/postgresql:12.9.0-debian-10-r62
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            args:
+            - -c
+            - /opt/bitnami/postgresql/bin/pg_dumpall -h db-pg12 -U postgres > /backup/pg12_dump_$(date -u +%H).sql
+            env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-pg12
+                  key: postgresql-password
+            volumeMounts:
+              - name: pg12-backup
+                mountPath: /backup
+          volumes:
+            - name: pg12-backup
+              persistentVolumeClaim:
+                claimName: pg12-backup-claim
+          restartPolicy: OnFailure
