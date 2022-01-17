@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg12-data-claim
+spec:
+  volumeName: pg12-data
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+# 10gb data volume on node with `db=true` label
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pg12-data
+  labels:
+    app: pg12
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /data/k8s/pg12
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: db
+          operator: In
+          values:
+          - "true"
+---
+# NAS volume for backups
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pg12-backup-claim
+spec:
+  volumeName: pg12-backup
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pg12-backup
+  labels:
+    app: pg12
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/pg12/backup"
+  mountOptions:
+    - nfsvers=4.2

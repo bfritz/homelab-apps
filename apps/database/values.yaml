@@ -1,0 +1,13 @@
+pg12:
+  image:
+    tag: 12.9.0-debian-10-r62
+
+  replication:
+    enabled: false
+
+  persistence:
+    existingClaim: "pg12-data-claim"
+
+  primary:
+    nodeSelector:
+      db: "true"
