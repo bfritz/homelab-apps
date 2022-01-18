@@ -1,0 +1,16 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: pg12-creds
+  namespace: database
+spec:
+  encryptedData:
+    postgresql-password: AgCT6UQhQoqy39cDnCxlqDCjGFRhKZDSCfDfH5d2vJdDB+P/nGYDqA5jAFRW8sc+H/3F07OKlMXFL6QRMCnC1XFpSJr7R1ICf9g6A2bHTELAva3zhwYXwFX679ptwdpBumaFGDYJgnY6mPehHGg4iAbWMwR0TgplxPn06tF3+sLUbOvlGz36LnelsvEZrzeoefHhkU0WUFdNHrJc/poSsS3xqdJkkWN3+af9Za/zQQJANfpsoMcc8DUuVH2UtCX1LaLXegT2JBrDx9xEqjNJydeQxSQN4De5I9/77uykrUERgJyCvYC0ZtxDuXur4CcHq7ltF6EAQdFg7hlfLpycmqNmQqye+PKm/tXRPi+peQsqm4I6K1drMEDu4GJgvwm2sHpxQNDdeWsLBLlWfeNfxKBqVOTOW4NA7Qk8mGcI7FX3q0WMTxn/j40c3A3r8Sw6Azd9pu4XCs80J5gI8P8bo2C0Dfh7MDei2LjVKYLTCByRnl+d8DVrT7qcFFf57pAXahOOWPEQ2eAp+n/dJZqPlevFklqCOvw+eC4+yqkxeNyGQ3ndIrhMpJ9k19Fp96igVcROJHywRbYzdLQeISwDisgoZ6j3dKBa2Ad2jScqaxa5U5yljImKMb8/Sg8I2mJ0JQe3TWdNx9/N8YHiCuG3VkdSSqGsbsyCPRuK2c1Wta7tnGvkdsHkml+q8+1eBlkcsTApAeG9B8+dJ/G3dtOeLthptS02ooU=
+  template:
+    data: null
+    metadata:
+      creationTimestamp: null
+      name: pg12-creds
+      namespace: database
+
