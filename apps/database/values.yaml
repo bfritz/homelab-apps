@@ -1,6 +1,9 @@
 pg12:
   image:
     tag: 12.9.0-debian-10-r62
+    # debug: true
+
+  existingSecret: pg12-creds
 
   replication:
     enabled: false

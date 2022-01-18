@@ -27,7 +27,7 @@ spec:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: app-database-pg12
+                  name: pg12-creds
                   key: postgresql-password
             volumeMounts:
               - name: pg12-backup
