@@ -14,3 +14,13 @@ pg12:
   primary:
     nodeSelector:
       db: "true"
+
+  tls:
+    enabled: true
+    certificatesSecret: pg12-certs
+    certCAFilename: "ca.crt"
+    certFilename: "pg12.crt"
+    certKeyFilename: "pg12.key"
+
+  volumePermissions:
+    enabled: true  # needed to ensure correct permission for certificate files in `tls` section above
