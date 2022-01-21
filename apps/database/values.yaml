@@ -24,3 +24,9 @@ pg12:
 
   volumePermissions:
     enabled: true  # needed to ensure correct permission for certificate files in `tls` section above
+
+  service:
+    type: LoadBalancer
+    loadBalancerIP: 172.22.18.33  # part of MetalLB private pool
+    port: 6432
+    externalTrafficPolicy: Local  # preserve client source IP to target pod
