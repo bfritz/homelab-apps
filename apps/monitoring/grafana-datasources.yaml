@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana-datasources
+  namespace: monitoring
+stringData:
+  datasources.yaml: |-
+    apiVersion: 1
+    datasources:
+      - name: prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-k8s.monitoring.svc:9090
+        editable: "false"
+        version: 1
+      - name: pg12
+        type: postgres
+        access: proxy
+        url: app-database-pg12.database.svc:6432
+        editable: "false"
+        version: 1
+        database: metrics
+        user: grafana
+        jsonData:
+          postgresVersion: 1200
+          tlsAuth: true
+          tlsAuthWithCACert: true
+          tlsSkipVerify: false
+          tlsConfigurationMethod: "file-path"
+          sslRootCertFile: /etc/grafana/certs/pg12/ca.crt
+          sslCertFile: /etc/grafana/certs/pg12/tls.crt
+          sslKeyFile: /etc/grafana/certs/pg12/tls.key
+          sslmode: "verify-full"
+          timescaledb: false
+          postgresVersion: 1200

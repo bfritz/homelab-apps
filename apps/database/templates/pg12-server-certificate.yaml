@@ -8,6 +8,7 @@ spec:
   commonName: pg12
   dnsNames:
     - pg12
+    - app-database-pg12.database.svc
   privateKey:
     algorithm: ECDSA
   usages:

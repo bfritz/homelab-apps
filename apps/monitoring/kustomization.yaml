@@ -65,6 +65,25 @@ patches:
       spec:
         template:
           spec:
+            initContainers:
+            - name: grafana-init-chmod-certs
+              image: busybox:1.35-musl
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -xc
+                - |
+                  cp /tmp/certs/* /etc/grafana/certs/
+                  chmod 400 /etc/grafana/certs/*.key
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 100Mi
+              volumeMounts:
+              - mountPath: /tmp/certs
+                name: grafana-pg12-client-cert-raw
+              - mountPath: /etc/grafana/certs
+                name: grafana-pg12-client-cert
             containers:
             - name: grafana
               env:
@@ -92,6 +111,9 @@ patches:
                 readOnly: false
               - name: sc-dashboard-volume
                 mountPath: "/grafana-dashboard-definitions/cm"
+              - name: grafana-pg12-client-cert
+                mountPath: /etc/grafana/certs/pg12
+                readOnly: true
             - name: grafana-sc-dashboard
               image: "kiwigrid/k8s-sidecar"
               imagePullPolicy: IfNotPresent
@@ -117,6 +139,17 @@ patches:
                 name: grafana-notifiers-brad
             - name: sc-dashboard-volume
               emptyDir: {}
+            - name: grafana-pg12-client-cert-raw
+              secret:
+                secretName: pg12-grafana-cert
+                defaultMode: 0400 # leading `0` is significant; yields octal value in yaml
+            - name: grafana-pg12-client-cert
+              emptyDir: {}
+
+  - path: grafana-datasources.yaml
+    target:
+      name: grafana-datasources
+      kind: Secret
 
   - patch: |-
       apiVersion: apps/v1
