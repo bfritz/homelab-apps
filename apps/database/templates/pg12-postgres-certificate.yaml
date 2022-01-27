@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pg12-postgres-certificate
+  namespace: database
+spec:
+  secretName: pg12-postgres-cert
+  commonName: postgres
+  dnsNames:
+    - postgres
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - client auth
+
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer
