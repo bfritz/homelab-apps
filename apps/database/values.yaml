@@ -14,6 +14,40 @@ pg12:
   primary:
     nodeSelector:
       db: "true"
+    extraVolumes:
+    - name: health-check-cert-raw
+      secret:
+        secretName: pg12-postgres-cert
+        defaultMode: 0400 # leading `0` is significant; yields octal value in yaml
+    - name: health-check-cert
+      emptyDir: {}
+    extraVolumeMounts:
+    - name: health-check-cert
+      mountPath: /opt/bitnami/postgresql/healthcheckcerts
+      readOnly: true
+    # workaround for https://github.com/kubernetes/kubernetes/issues/57923
+    extraInitContainers:
+    - command:
+      - /bin/sh
+      - -xc
+      - |
+        cp /tmp/hccerts/* /opt/bitnami/postgresql/healthcheckcerts/
+        chown -R 1001:1001 /opt/bitnami/postgresql/healthcheckcerts/
+        chmod 600 /opt/bitnami/postgresql/healthcheckcerts/*.key
+      image: busybox:1.35-musl
+      imagePullPolicy: IfNotPresent
+      name: init-chmod-healthcheck-certs
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+      securityContext:
+        runAsUser: 0
+      volumeMounts:
+      - mountPath: /tmp/hccerts
+        name: health-check-cert-raw
+      - mountPath: /opt/bitnami/postgresql/healthcheckcerts
+        name: health-check-cert
 
   tls:
     enabled: true
@@ -30,3 +64,36 @@ pg12:
     loadBalancerIP: 172.22.18.33  # part of MetalLB private pool
     port: 6432
     externalTrafficPolicy: Local  # preserve client source IP to target pod
+
+  # Override default liveness and readiness probes to use the `postgres`
+  # client cert instead of default `pg12` server cert for the probes.
+  livenessProbe:
+    enabled: false
+  customLivenessProbe:
+    exec:
+      command:
+      - /bin/sh
+      - -c
+      - exec pg_isready -U "postgres" -d "sslcert=/opt/bitnami/postgresql/healthcheckcerts/tls.crt sslkey=/opt/bitnami/postgresql/healthcheckcerts/tls.key" -h 127.0.0.1 -p 5432
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+
+  readinessProbe:
+    enabled: false
+  customReadinessProbe:
+    exec:
+      command:
+      - /bin/sh
+      - -c
+      - -e
+      - |
+        exec pg_isready -U "postgres" -d "sslcert=/opt/bitnami/postgresql/healthcheckcerts/tls.crt sslkey=/opt/bitnami/postgresql/healthcheckcerts/tls.key" -h 127.0.0.1 -p 5432
+        [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
