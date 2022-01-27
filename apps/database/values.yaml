@@ -17,10 +17,10 @@ pg12:
 
   tls:
     enabled: true
-    certificatesSecret: pg12-certs
+    certificatesSecret: pg12-server-cert
     certCAFilename: "ca.crt"
-    certFilename: "pg12.crt"
-    certKeyFilename: "pg12.key"
+    certFilename: "tls.crt"
+    certKeyFilename: "tls.key"
 
   volumePermissions:
     enabled: true  # needed to ensure correct permission for certificate files in `tls` section above

@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pg12-server-certificate
+  namespace: database
+spec:
+  secretName: pg12-server-cert
+  commonName: pg12
+  dnsNames:
+    - pg12
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - server auth
+
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer
