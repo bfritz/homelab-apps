@@ -29,7 +29,7 @@ images:
   - name: gotify/server
     digest: sha256:57aa2aabac035c16118f625dd6d3d2c3ca421b43b28cb27512f3212193d65771 # 2.1.0
   - name: kiwigrid/k8s-sidecar
-    digest: sha256:35654389f8a9b7816193a4811cf3ceb6cf309ece8874e84b3d2d8399e618059b # 1.14.2
+    digest: sha256:2029752d7596ec30b65f1ce07bad9af1cdbb6cf7013fcc1f5720f4bf7c4b61e1 # 1.15.4
 
 patches:
   - patch: |-
