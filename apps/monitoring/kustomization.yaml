@@ -65,6 +65,7 @@ patches:
       spec:
         template:
           spec:
+            automountServiceAccountToken: true
             initContainers:
             - name: grafana-init-chmod-certs
               image: busybox:1.35-musl
