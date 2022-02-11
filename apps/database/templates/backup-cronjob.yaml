@@ -22,7 +22,7 @@ spec:
             - /bin/sh
             args:
             - -c
-            - umask 0177 ; /opt/bitnami/postgresql/bin/pg_dumpall -h app-database-pg12 -U postgres > /backup/pg12_dump_$(date -u +%H).sql
+            - umask 0177 ; /opt/bitnami/postgresql/bin/pg_dumpall -h app-database-pg12 -p 6432 -U postgres > /backup/pg12_dump_$(date -u +%H).sql
             env:
             - name: PGPASSWORD
               valueFrom:
