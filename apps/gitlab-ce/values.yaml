@@ -1,0 +1,57 @@
+gitlab:
+  global:
+    edition: ce
+    gitlabVersion: 14.7.2
+    hosts:
+      domain:
+        k8s
+    ingress:
+      enabled: true
+      configureCertmanager: false
+      class: haproxy-private
+      provider: haproxy
+    psql:
+      host: app-database-pg12.database.svc
+      port: 6432
+      ssl:
+        secret: gitlab-pg12-client-cert
+        clientCertificate: tls.crt
+        clientKey: tls.key
+        serverCA: ca.crt
+    extraEnv:
+      PGSSLCERT: /etc/gitlab/postgres/ssl/client-certificate.pem
+      PGSSLKEY: /etc/gitlab/postgres/ssl/client-key.pem
+      PGSSLROOTCERT: /etc/gitlab/postgres/ssl/server-ca.pem
+  certmanager:
+    install: false
+  gitlab-runner:
+    # Must include data for `gitlab.k8s.crt`.
+    # See https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab
+    certsSecretName: app-gitlab-ce-wildcard-tls-chain
+  minio:
+    persistence:
+      volumeName: gitlab-minio-data
+  nginx-ingress:
+    enabled: false
+  postgresql:
+    install: false
+  prometheus:
+    install: false
+  redis:
+    master:
+      persistence:
+        matchLabels:
+          app: gitlab
+          volname: gitlab-redis-master-data
+  gitlab:
+    gitaly:
+      persistence:
+        matchLabels:
+          app: gitlab
+          volname: gitlab-gitaly-data
+    sidekiq:
+      resources:
+        # default requests are pretty chunky at 900m and 2G
+        requests:
+          cpu: 500m
+          memory: 1G

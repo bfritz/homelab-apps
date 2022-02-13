@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitlab-gitaly-data
+  labels:
+    app: gitlab
+    volname: gitlab-gitaly-data
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/gitlab/gitaly-data"
+  mountOptions:
+    - nfsvers=4.2
