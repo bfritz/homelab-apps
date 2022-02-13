@@ -17,6 +17,7 @@ resources:
   - ./grafana-ingress.yaml
   - ./grafana-monitoring-dashboards-view-role.yaml
   - ./grafana-notifiers-brad.yaml
+  - ./grafana-pg12-client-certificate.yaml
   - ./grafana-rolebinding.yaml
   - ./probes-internal-ips.yaml
   - ./probes-key-public-ips.yaml
@@ -142,7 +143,7 @@ patches:
               emptyDir: {}
             - name: grafana-pg12-client-cert-raw
               secret:
-                secretName: pg12-grafana-cert
+                secretName: grafana-pg12-client-cert
                 defaultMode: 0400 # leading `0` is significant; yields octal value in yaml
             - name: grafana-pg12-client-cert
               emptyDir: {}
