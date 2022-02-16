@@ -5,7 +5,6 @@ metadata:
 
 resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
-  - ./alertmanager-email-brad.yaml
   - ./alertmanager-ingress.yaml
   - ./gotify-admin-password.yaml
   - ./gotify-deployment.yaml
@@ -56,6 +55,11 @@ patches:
           matchLabels:
             alertmanagerConfig: active
         externalUrl: https://alertmanager.k8s
+
+  - path: alertmanager-config-secret.yaml
+    target:
+      name: alertmanager-main
+      kind: Secret
 
   - patch: |-
       apiVersion: apps/v1
