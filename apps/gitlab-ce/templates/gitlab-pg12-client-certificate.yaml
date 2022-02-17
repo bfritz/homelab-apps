@@ -1,0 +1,19 @@
+# for GitLab to connect to the `pg12` database instance
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}-pg12-client-cert
+  namespace: {{ .Release.Namespace }}
+spec:
+  secretName: gitlab-pg12-client-cert
+  commonName: gitlab
+  dnsNames:
+    - gitlab
+  privateKey:
+    algorithm: ECDSA
+  usages:
+    - client auth
+
+  issuerRef:
+    name: cluster-ca
+    kind: ClusterIssuer

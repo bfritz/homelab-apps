@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: gitlab-minio-data
+  labels:
+    app: gitlab
+    volname: gitlab-minio-data
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/gitlab/minio-data"
+  mountOptions:
+    - nfsvers=4.2
