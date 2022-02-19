@@ -10,6 +10,8 @@ gitlab:
       configureCertmanager: false
       class: haproxy-private
       provider: haproxy
+      annotations:
+        cert-manager.io/cluster-issuer: cluster-ca
     psql:
       host: app-database-pg12.database.svc
       port: 6432
@@ -29,6 +31,9 @@ gitlab:
     # See https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab
     certsSecretName: app-gitlab-ce-wildcard-tls-chain
   minio:
+    ingress:
+      tls:
+        secretName: minio-tls
     persistence:
       volumeName: gitlab-minio-data
   nginx-ingress:
@@ -43,6 +48,10 @@ gitlab:
         matchLabels:
           app: gitlab
           volname: gitlab-redis-master-data
+  registry:
+    ingress:
+      tls:
+        secretName: registry-tls
   gitlab:
     gitaly:
       persistence:
@@ -55,3 +64,7 @@ gitlab:
         requests:
           cpu: 500m
           memory: 1G
+    webservice:
+      ingress:
+        tls:
+          secretName: gitlab-tls
