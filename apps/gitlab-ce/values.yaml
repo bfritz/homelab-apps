@@ -24,6 +24,9 @@ gitlab:
       PGSSLCERT: /etc/gitlab/postgres/ssl/client-certificate.pem
       PGSSLKEY: /etc/gitlab/postgres/ssl/client-key.pem
       PGSSLROOTCERT: /etc/gitlab/postgres/ssl/server-ca.pem
+    certificates:
+      customCAs:
+      - secret: cluster-ca-root-cert
   certmanager:
     install: false
   gitlab-runner:
