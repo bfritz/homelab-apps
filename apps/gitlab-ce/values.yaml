@@ -30,9 +30,12 @@ gitlab:
   certmanager:
     install: false
   gitlab-runner:
-    # Must include data for `gitlab.k8s.crt`.
-    # See https://docs.gitlab.com/runner/install/kubernetes.html#providing-a-custom-certificate-for-accessing-gitlab
-    certsSecretName: app-gitlab-ce-wildcard-tls-chain
+    # Normally used for `gitlab.k8s.crt` certificate, but abusing so our CA root
+    # cert is mounted in the runner pods for use with $CI_SERVER_TLS_CA_FILE.
+    certsSecretName: cluster-ca-root-cert
+    envVars:
+    - name: CI_SERVER_TLS_CA_FILE
+      value: "/home/gitlab-runner/.gitlab-runner/certs/cluster-ca-root.crt"
   minio:
     ingress:
       tls:
