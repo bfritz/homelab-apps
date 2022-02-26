@@ -2,7 +2,11 @@ haproxy-ingress-private:
   controller:
     ingressClass: haproxy-private
     service:
+      annotations:
+        metallb.universe.tf/address-pool: private-pool
+        metallb.universe.tf/allow-shared-ip: private-main
       loadBalancerIP: 172.22.18.32
+      externalTrafficPolicy: Cluster
     stats:
       enabled: true
       port: 1936
