@@ -64,6 +64,13 @@ gitlab:
         matchLabels:
           app: gitlab
           volname: gitlab-gitaly-data
+    gitlab-shell:
+      service:
+        annotations:
+          metallb.universe.tf/address-pool: private-pool
+          metallb.universe.tf/allow-shared-ip: private-main
+        loadBalancerIP: 172.22.18.32
+        type: LoadBalancer
     sidekiq:
       resources:
         # default requests are pretty chunky at 900m and 2G
