@@ -17,6 +17,9 @@ haproxy-ingress-private:
       enabled: true
     logs: # access logs
       enabled: true
+    config:
+      config-frontend: |
+        capture request header User-Agent len 100
 
 haproxy-ingress-public:
   controller:
@@ -33,3 +36,6 @@ haproxy-ingress-public:
       enabled: true
     logs: # access logs
       enabled: true
+    config:
+      config-frontend: |
+        capture request header User-Agent len 100
