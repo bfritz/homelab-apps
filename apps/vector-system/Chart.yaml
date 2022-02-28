@@ -3,16 +3,16 @@ name: vector
 description: Vector for log shipping to central store.
 
 type: application
-version: 0.0.1
+version: 0.0.2
 
-appVersion: "0.3.0"
+appVersion: "0.6.0"
 
 dependencies:
 - name: vector
   alias: vector-agent
-  version: 0.3.0
+  version: 0.6.0
   repository: https://helm.vector.dev
 - name: vector
   alias: vector-aggregator
-  version: 0.3.0
+  version: 0.6.0
   repository: https://helm.vector.dev
