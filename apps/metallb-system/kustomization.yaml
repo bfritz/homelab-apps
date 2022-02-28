@@ -4,5 +4,5 @@ metadata:
   name: metallb
 
 resources:
-  - github.com/metallb/metallb//manifests?ref=846c55af003807f1fe4066711607122456509fc4 # v0.11.0 tag
+  - github.com/metallb/metallb/manifests?ref=dbe1a20bb820e2b99337fd658ee40a2bbb53df42 # v0.12.1 tag
   - ./config.yaml
