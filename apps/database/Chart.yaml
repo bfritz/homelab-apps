@@ -8,5 +8,5 @@ version: 0.0.1
 dependencies:
 - name: postgresql
   alias: pg12
-  version: 10.16.1
+  version: 10.16.2
   repository: https://charts.bitnami.com/bitnami
