@@ -4,8 +4,4 @@ metadata:
   name: sealed-secrets
 
 resources:
-  # Vendor the manifest from https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.16.0/controller.yaml
-  # to allow fixing the API deprecated in k8s 1.22 .
-  # See https://github.com/bitnami-labs/sealed-secrets/pull/627 for the fix and
-  # https://github.com/bitnami-labs/sealed-secrets/issues/661 for why v0.17.0 is not out yet.
-  - ./controller.yaml
+  - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.3/controller.yaml
