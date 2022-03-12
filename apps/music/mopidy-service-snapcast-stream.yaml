@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: mopidy
+  name: mopidy-snapcast-stream
+spec:
+  type: NodePort
+  ports:
+  - name: snapcast-stream
+    port: 1704
+    targetPort: snapcast-stream
+    nodePort: 31704
+  selector:
+    app.kubernetes.io/name: mopidy

@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mopidy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mopidy
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mopidy
+    spec:
+      containers:
+      - name: mopidy
+        image: ghcr.io/bfritz/mopidy:2022-03-12
+        imagePullPolicy: Always
+        args:
+        - -o
+        - http/hostname=0.0.0.0
+        - -o
+        - audio/output=audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! tcpclientsink host=127.0.0.1 port=7777
+        ports:
+        - containerPort: 6680
+          name: http
+        resources:
+          limits:
+            cpu: 200m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+      - name: snapcast-server
+        image: ghcr.io/bfritz/snapcast-server:2022-03-12
+        imagePullPolicy: Always
+        args:
+        - --stream.source="tcp://0.0.0.0:7777?name=default"
+        - --logging.filter="*:warning"
+        ports:
+        - containerPort: 1704
+          name: snapcast-stream
+        - containerPort: 1705
+          name: snapcast-ctrl
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 100 # mopidy
+        runAsGroup: 18 # audio
+      serviceAccountName: mopidy
