@@ -10,3 +10,5 @@ resources:
   - ./mopidy-service-snapcast-stream.yaml
   - ./mopidy-service-snapcast-control.yaml
   - ./mopidy-ingress.yaml
+  - ./music-library-volume.yaml
+  - ./podcast-opml-volume.yaml
