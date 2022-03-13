@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca
+  name: mopidy
+spec:
+  ingressClassName: haproxy-private
+  tls:
+  - secretName: mopidy-tls
+    hosts:
+    - music.k8s
+  rules:
+  - host: music.k8s
+    http:
+      paths:
+      - backend:
+          service:
+            name: mopidy-web
+            port:
+              name: http
+        path: /
+        pathType: Prefix

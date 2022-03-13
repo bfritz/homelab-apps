@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: music
+
+resources:
+  - ./mopidy-service-account.yaml
+  - ./mopidy-deployment.yaml
+  - ./mopidy-service-web.yaml
+  - ./mopidy-service-snapcast-stream.yaml
+  - ./mopidy-service-snapcast-control.yaml
+  - ./mopidy-ingress.yaml
