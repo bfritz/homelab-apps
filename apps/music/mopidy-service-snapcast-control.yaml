@@ -1,15 +1,18 @@
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+    metallb.universe.tf/allow-shared-ip: private-main
   labels:
     app.kubernetes.io/name: mopidy
   name: mopidy-snapcast-control
 spec:
-  type: NodePort
+  type: LoadBalancer
+  loadBalancerIP: 172.22.18.32
   ports:
   - name: snapcast-control
-    port: 1705
+    port: 31705
     targetPort: snapcast-ctrl
-    nodePort: 31705
   selector:
     app.kubernetes.io/name: mopidy
