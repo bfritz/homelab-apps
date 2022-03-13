@@ -21,6 +21,8 @@ spec:
         - http/hostname=0.0.0.0
         - -o
         - audio/output=audioresample ! audioconvert ! audio/x-raw,rate=48000,channels=2,format=S16LE ! tcpclientsink host=127.0.0.1 port=7777
+        - -o
+        - podcast/browse_root=/var/lib/mopidy/Podcasts/main.opml
         ports:
         - containerPort: 6680
           name: http
@@ -34,6 +36,9 @@ spec:
         volumeMounts:
         - name: music-library
           mountPath: /var/lib/mopidy/Music # matches default $XDG_MUSIC_DIR
+          readOnly: true
+        - name: podcast-opml
+          mountPath: /var/lib/mopidy/Podcasts
           readOnly: true
       - name: snapcast-server
         image: ghcr.io/bfritz/snapcast-server:2022-03-12
@@ -55,3 +60,6 @@ spec:
       - name: music-library
         persistentVolumeClaim:
           claimName: music-library-originals-claim
+      - name: podcast-opml
+        persistentVolumeClaim:
+          claimName: podcast-opml-claim
