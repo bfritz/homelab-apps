@@ -20,6 +20,7 @@ haproxy-ingress-private:
     config:
       config-frontend: |
         capture request header User-Agent len 100
+      max-connections: "250"
 
 haproxy-ingress-public:
   controller:
@@ -39,3 +40,4 @@ haproxy-ingress-public:
     config:
       config-frontend: |
         capture request header User-Agent len 100
+      max-connections: "250"
