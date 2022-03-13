@@ -31,6 +31,10 @@ spec:
           requests:
             cpu: 100m
             memory: 100Mi
+        volumeMounts:
+        - name: music-library
+          mountPath: /var/lib/mopidy/Music # matches default $XDG_MUSIC_DIR
+          readOnly: true
       - name: snapcast-server
         image: ghcr.io/bfritz/snapcast-server:2022-03-12
         imagePullPolicy: Always
@@ -47,3 +51,7 @@ spec:
         runAsUser: 100 # mopidy
         runAsGroup: 18 # audio
       serviceAccountName: mopidy
+      volumes:
+      - name: music-library
+        persistentVolumeClaim:
+          claimName: music-library-originals-claim
