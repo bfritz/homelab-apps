@@ -12,6 +12,18 @@ spec:
       labels:
         app.kubernetes.io/name: mopidy
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - haproxy-ingress-private
+            namespaces:
+            - haproxy-ingress
+            topologyKey: kubernetes.io/hostname
       containers:
       - name: mopidy
         image: ghcr.io/bfritz/mopidy:2022-03-12
