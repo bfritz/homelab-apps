@@ -4,4 +4,4 @@ metadata:
   name: sealed-secrets
 
 resources:
-  - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.17.3/controller.yaml
+  - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.18.0/controller.yaml
