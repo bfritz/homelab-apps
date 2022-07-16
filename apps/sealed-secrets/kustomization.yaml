@@ -1,7 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-metadata:
-  name: sealed-secrets
-
-resources:
-  - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.18.0/controller.yaml
