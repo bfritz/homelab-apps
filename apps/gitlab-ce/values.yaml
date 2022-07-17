@@ -1,7 +1,7 @@
 gitlab:
   global:
     edition: ce
-    gitlabVersion: 15.0.4
+    gitlabVersion: 15.1.2
     hosts:
       domain:
         k8s
