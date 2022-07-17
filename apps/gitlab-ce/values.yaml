@@ -78,6 +78,9 @@ gitlab:
           cpu: 500m
           memory: 1G
     webservice:
+      hpa:
+        minReplicas: 1
+        maxReplicas: 3
       ingress:
         tls:
           secretName: gitlab-tls
