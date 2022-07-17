@@ -14,6 +14,27 @@ spec:
       activeDeadlineSeconds: 1200
       template:
         spec:
+          initContainers:
+          - name: pg12-backup-init-chmod-certs # PG client cert k8s permission workaround
+            image: busybox:1.35-musl
+            imagePullPolicy: IfNotPresent
+            command:
+              - /bin/sh
+              - -xc
+              - |
+                chown 1001 /etc/certs/pg12
+                cp /tmp/certs/* /etc/certs/pg12/
+                chown -R 1001:0 /etc/certs/pg12
+                chmod 400 /etc/certs/pg12/*
+            resources:
+              requests:
+                cpu: 100m
+                memory: 100Mi
+            volumeMounts:
+            - mountPath: /tmp/certs
+              name: pg12-postgres-cert-raw
+            - mountPath: /etc/certs/pg12
+              name: pg12-postgres-cert
           containers:
           - name: pg12-backup
             image: bitnami/postgresql:12.9.0-debian-10-r62
@@ -24,16 +45,28 @@ spec:
             - -c
             - umask 0177 ; /opt/bitnami/postgresql/bin/pg_dumpall -h app-database-pg12 -p 6432 -U postgres > /backup/pg12_dump_$(date -u +%H).sql
             env:
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pg12-creds
-                  key: postgresql-password
+            - name: PGSSLMODE
+              value: "require"
+            - name: PGSSLROOTCERT
+              value: "/etc/certs/pg12/ca.crt"
+            - name: PGSSLCERT
+              value: "/etc/certs/pg12/tls.crt"
+            - name: PGSSLKEY
+              value: "/etc/certs/pg12/tls.key"
             volumeMounts:
               - name: pg12-backup
                 mountPath: /backup
+              - name: pg12-postgres-cert
+                mountPath: /etc/certs/pg12
+                readOnly: true
           volumes:
             - name: pg12-backup
               persistentVolumeClaim:
                 claimName: pg12-backup-claim
+            - name: pg12-postgres-cert-raw
+              secret:
+                secretName: pg12-postgres-cert
+                defaultMode: 0400
+            - name: pg12-postgres-cert
+              emptyDir: {}
           restartPolicy: OnFailure
