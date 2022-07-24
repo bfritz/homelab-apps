@@ -6,7 +6,6 @@ metadata:
 resources:
   - github.com/bfritz/homelab-apps/vendor/kube-prometheus
   - ./alertmanager-ingress.yaml
-  - ./gotify-admin-password.yaml
   - ./gotify-deployment.yaml
   - ./gotify-ingress.yaml
   - ./gotify-service.yaml
