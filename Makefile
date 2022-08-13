@@ -48,6 +48,10 @@ copy_cluster-ca_cert_to_gitlab_namespace: /tmp/cert1.pem
 	endif
 	kubectl create secret generic -n gitlab-ce cluster-ca-root-cert \
             --from-file=cluster-ca-root.crt=$<
+	kubectl delete configmap -n argocd argocd-tls-certs-cm
+	kubectl create configmap -n argocd argocd-tls-certs-cm \
+            --from-file=gitlab.k8s=$<
+
 /tmp/cert1.pem:
 	ifndef KUBECONFIG
 	$(error KUBECONFIG is not set)
