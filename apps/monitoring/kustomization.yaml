@@ -4,7 +4,7 @@ metadata:
   name: monitoring
 
 resources:
-  - github.com/bfritz/homelab-apps/vendor/kube-prometheus
+  - ./vendor/kube-prometheus/
   - ./alertmanager-ingress.yaml
   - ./gotify-deployment.yaml
   - ./gotify-ingress.yaml
