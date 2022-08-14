@@ -1,4 +1,4 @@
 [submodule "vendor/kube-prometheus"]
-	path = vendor/kube-prometheus
+	path = apps/monitoring/vendor/kube-prometheus
 	url = https://github.com/prometheus-operator/kube-prometheus.git
 	branch = main
