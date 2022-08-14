@@ -9,6 +9,7 @@ stringData:
     datasources:
       - name: prometheus
         type: prometheus
+        isDefault: true
         access: proxy
         url: http://prometheus-k8s.monitoring.svc:9090
         editable: "false"
