@@ -1,0 +1,19 @@
+# Address pool exposed outside firewall.
+#
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: public-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.22.18.64/27
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: public-pool-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - public-pool
