@@ -1,0 +1,18 @@
+# Address pool only exposed to internal network.
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: private-pool
+  namespace: metallb-system
+spec:
+  addresses:
+  - 172.22.18.32/27
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: private-pool-advertisement
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - private-pool
