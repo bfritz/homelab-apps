@@ -38,7 +38,7 @@ apply_encrypted_sops_secrets:
 	ifndef SOPS_AGE_KEY
 	$(error SOPS_AGE_KEY is not set)
 	endif
-	find apps -name '*.yaml.enc' -execdir sh -c 'sops --decrypt {} | kubectl apply -f -' \;
+	find apps -name '*.yaml.enc' -execdir sh -c 'sops --decrypt --input-type=yaml --output-type=yaml {} | kubectl apply -f -' \;
 
 
 # Copy root cert used by cluster-ca issuer into gitlab-ce namespace so it can be trusted.
