@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: openldap-data
+  labels:
+    app.kubernetes.io/name: openldap-data
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/openldap-data"
+  mountOptions:
+    - nfsvers=4.2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openldap-data
+  namespace: directory
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: openldap-data
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: openldap-config
+  labels:
+    app.kubernetes.io/name: openldap-config
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/openldap-config"
+  mountOptions:
+    - nfsvers=4.2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: openldap-config
+  namespace: directory
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: openldap-config
