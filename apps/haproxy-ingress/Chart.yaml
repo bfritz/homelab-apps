@@ -3,16 +3,16 @@ name: haproxy-ingress
 description: haproxy ingress controller
 
 type: application
-version: 13.6.0
+version: 13.9.0
 
-appVersion: "v0.13.6"
+appVersion: "v0.13.9"
 
 dependencies:
 - name: haproxy-ingress
   alias: haproxy-ingress-private
-  version: 0.13.6
+  version: 0.13.9
   repository: https://haproxy-ingress.github.io/charts
 - name: haproxy-ingress
   alias: haproxy-ingress-public
-  version: 0.13.6
+  version: 0.13.9
   repository: https://haproxy-ingress.github.io/charts
