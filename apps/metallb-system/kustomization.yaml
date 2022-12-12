@@ -4,6 +4,6 @@ metadata:
   name: metallb
 
 resources:
-  - github.com/metallb/metallb/config/native?ref=ddd605cc5e9d7b207d28f5ebffa990c00bbd5407 # v0.13.5 tag
+  - github.com/metallb/metallb/config/native?ref=b96bce642175ec99ed4b3e29e552c2e4f7aeaafd # v0.13.7 tag
   - ./private-pool.yaml
   - ./public-pool.yaml
