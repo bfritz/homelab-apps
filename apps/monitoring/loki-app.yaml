@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-loki
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: apps/monitoring/loki
+    repoURL: https://github.com/bfritz/homelab-apps.git
+    targetRevision: add_loki
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

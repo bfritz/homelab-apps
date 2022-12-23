@@ -17,6 +17,7 @@ resources:
   - ./grafana-notifiers-brad.yaml
   - ./grafana-pg12-client-certificate.yaml
   - ./grafana-rolebinding.yaml
+  - ./loki-app.yaml
   - ./probes-internal-ips.yaml
   - ./probes-key-public-ips.yaml
   - ./probes-public-http-endpoints.yaml
