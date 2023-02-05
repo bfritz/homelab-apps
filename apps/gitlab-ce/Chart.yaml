@@ -3,9 +3,9 @@ name: gitlab-ce
 description: GitLab Community Edition continuous integration server.
 
 type: application
-version: 0.0.11
+version: 0.0.12
 
 dependencies:
 - name: gitlab
-  version: 6.7.5
+  version: 6.8.1
   repository: https://charts.gitlab.io/
