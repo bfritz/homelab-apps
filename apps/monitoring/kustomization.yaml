@@ -184,6 +184,22 @@ patches:
                 limits:
                   cpu: 80m
 
+  - patch: |-
+      apiVersion: apps/v1
+      kind: DaemonSet
+      metadata:
+        name: node-exporter
+        namespace: monitoring
+      spec:
+        template:
+          spec:
+            containers:
+            - name: node-exporter
+              # bump CPU allotment for node-exporter to avoid throttling (and Alertmanager alerts)
+              resources:
+                limits:
+                  cpu: 500m
+
   # enable ICMP for blackbox-exporter and increase CPU limits
   - path: blackbox-exporter-configuration.yaml
     target:
