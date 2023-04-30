@@ -1,0 +1,34 @@
+# By default, kube-prometheus RBAC rules allow monitoring in the `monitoring`,
+# `default`, and `kube-system` namespace.  To support `ServiceMonitor`s in
+# the `k0s-system` namespace, we need an additional role and binding in that
+# namespace.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus-k8s
+  namespace: k0s-system
+subjects:
+- kind: ServiceAccount
+  name: prometheus-k8s
+  namespace: monitoring
+roleRef:
+  name: prometheus-k8s
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-k8s
+  namespace: k0s-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch

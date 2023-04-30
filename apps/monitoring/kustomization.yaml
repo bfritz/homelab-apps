@@ -22,6 +22,7 @@ resources:
   - ./probes-public-http-endpoints.yaml
   - ./prometheus-haproxy-ingress-servicemonitor.yaml
   - ./prometheus-ingress.yaml
+  - ./prometheus-k0s-system-servicemonitor.yaml
   - ./prometheus-storage.yaml
   - ./prometheus_extra/additional-scrape-configs.yaml
 
@@ -255,3 +256,74 @@ patches:
               selector:
                 matchLabels:
                   app: prometheus
+
+  # Move ServiceMonitor resources for kube-controller-manager and
+  # kube-scheduler into k0s-system namespace where the pushgateway lives.
+  - patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: k0s-system
+      - op: replace
+        path: /spec/endpoints/0/port
+        value: http
+      - op: replace
+        path: /spec/endpoints/0/scheme
+        value: http
+      - op: remove
+        path: /spec/endpoints/0/tlsConfig
+      - op: replace
+        path: /spec/namespaceSelector/matchNames
+        value:
+          - k0s-system
+      - op: replace
+        path: /spec/selector/matchLabels
+        value:
+          k0s.k0sproject.io/stack: metrics
+      - op: add
+        path: /spec/endpoints/0/relabelings
+        value:
+          - action: replace
+            sourceLabels: ['exported_instance']
+            targetLabel: 'instance'
+          - action: replace
+            sourceLabels: ['exported_job']
+            targetLabel: 'job'
+    target:
+      group: monitoring.coreos.com
+      kind: ServiceMonitor
+      name: kube-controller-manager
+      version: v1
+  - patch: |-
+      - op: replace
+        path: /metadata/namespace
+        value: k0s-system
+      - op: replace
+        path: /spec/endpoints/0/port
+        value: http
+      - op: replace
+        path: /spec/endpoints/0/scheme
+        value: http
+      - op: remove
+        path: /spec/endpoints/0/tlsConfig
+      - op: replace
+        path: /spec/namespaceSelector/matchNames
+        value:
+          - k0s-system
+      - op: replace
+        path: /spec/selector/matchLabels
+        value:
+          k0s.k0sproject.io/stack: metrics
+      - op: add
+        path: /spec/endpoints/0/relabelings
+        value:
+          - action: replace
+            sourceLabels: ['exported_instance']
+            targetLabel: 'instance'
+          - action: replace
+            sourceLabels: ['exported_job']
+            targetLabel: 'job'
+    target:
+      group: monitoring.coreos.com
+      kind: ServiceMonitor
+      name: kube-scheduler
+      version: v1
