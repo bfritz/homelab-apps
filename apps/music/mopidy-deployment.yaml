@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mopidy
-        image: ghcr.io/bfritz/mopidy:2022-03-12
+        image: ghcr.io/bfritz/mopidy:2023-07-08
         imagePullPolicy: Always
         args:
         - -o
@@ -41,10 +41,10 @@ spec:
           mountPath: /var/lib/mopidy/Podcasts
           readOnly: true
       - name: snapcast-server
-        image: ghcr.io/bfritz/snapcast-server:2022-03-12
+        image: ghcr.io/bfritz/snapcast-server:2023-07-08
         imagePullPolicy: Always
         args:
-        - --stream.source="tcp://0.0.0.0:7777?name=default"
+        - --stream.source="tcp://0.0.0.0:7777?name=mopidy"
         - --logging.filter="*:warning"
         ports:
         - containerPort: 1704
