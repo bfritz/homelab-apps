@@ -1,0 +1,64 @@
+# List recipes
+
+tmpdir := `mktemp -d`
+
+# List all recipes
+@default:
+    just --list
+
+lint: lint_apps_yaml lint_helm lint_kustomize lint_dashboards
+
+lint_apps_yaml:
+    @echo "Linting apps.yaml ..."
+    @yq e < apps.yaml > /dev/null
+
+lint_helm:
+    @for app in `find apps -name Chart.yaml | xargs dirname | sort`; do \
+        echo "Linting $app (helm) ..."; \
+        (tmpdir=$(mktemp -d) && helm dependency update "$app" > /dev/null && helm lint "$app" > /dev/null && rm -r $tmpdir) || exit 1; \
+    done
+
+lint_kustomize:
+    @for app in `find apps -name kustomization.yaml | grep -v '/vendor/' | xargs dirname | sort`; do \
+        echo "Linting $app (kustomize)..."; \
+        (tmpdir=$(mktemp -d) && kubectl kustomize -o $tmpdir "$app" && rm -rf $tmpdir) || exit 1; \
+    done
+
+lint_dashboards:
+    @for dash in `ls apps/monitoring/dashboards/*.yaml | sort`; do \
+        echo "Linting dashboard $dash ..."; \
+        yq e '.data[]' < "$dash" | jq . > /dev/null ; \
+    done
+
+# Extract CA cert from cert-manager
+extract_certs:
+    # Extract individual certs from `cluster-ca-signing-certs` secret into `cert.pem` and `cert1.pem`
+    # where `cert.pem` is the intermediate and `cert1.pem` is the CA.
+    @test -n "$KUBECONFIG"
+    kubectl get secret -n cert-manager cluster-ca-signing-certs -o json \
+        | jq -r '.data["tls.crt"]' \
+        | base64 -d \
+        | awk 'split_after==1{n++;split_after=0} /-----END CERTIFICATE-----/ {split_after=1} { print > "{{tmpdir}}/cert" n ".pem"}'
+
+# Configure ArgoCD to trust gitlab.k8s server certificate
+argocd_trust_gitlab_cert: extract_certs
+    -kubectl delete configmap -n argocd argocd-tls-certs-cm
+    kubectl create configmap -n argocd argocd-tls-certs-cm \
+        --from-file=gitlab.k8s={{tmpdir}}/cert1.pem
+
+# Use $SOPS_AGE_KEY to decrypt all .enc files and apply to kubernetes
+sops_apply_secrets:
+    @test -n "$KUBECONFIG"
+    @test -n "$SOPS_AGE_KEY"
+    find apps -name '*.yaml.enc' -execdir sh -c 'sops --decrypt --input-type=yaml --output-type=yaml {} | kubectl apply -f -' \;
+
+# Encrypt {{file}}.sensitve into {{file}}.enc using $SOPS_AGE_KEY
+sops_encrypt file:
+    @test -n "$SOPS_AGE_KEY"
+    sops --encrypt --encrypted-regex '^(data|stringData|tls.crt|tls.key)$' \
+        --input-type yaml --output-type yaml \
+        --age="age16a2rje3pq2hns5g2dnd0nnwxu5rkam4885mk2hfcr0fs2v8444dqqjrtl9" \
+        {{file}}.sensitive > {{file}}.enc
+
+clean:
+    @find apps -name '*.sensitive' -execdir rm {} \;
