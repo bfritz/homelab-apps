@@ -3,9 +3,13 @@ name: database
 description: Databases that require persistant storage and fast disks.
 
 type: application
-version: 0.0.1
+version: 0.1.0
 
 dependencies:
+- name: cloudnative-pg
+  alias: cnpg
+  version: 0.20.0
+  repository: https://cloudnative-pg.github.io/charts
 - name: postgresql
   alias: pg12
   version: 10.16.2

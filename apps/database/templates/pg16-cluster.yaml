@@ -1,0 +1,20 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: cluster-example
+spec:
+  instances: 1
+
+  affinity:
+    nodeSelector:
+      db: "true"
+
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      volumeName: pg16-data
+      volumeMode: Filesystem
