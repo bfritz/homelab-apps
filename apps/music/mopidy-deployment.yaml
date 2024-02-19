@@ -45,12 +45,18 @@ spec:
         imagePullPolicy: Always
         args:
         - --stream.source="tcp://0.0.0.0:7777?name=mopidy"
+        - --stream.source="tcp://0.0.0.0:7778?name=bluetooth-1&mode=server&sampleformat=44100:16:2"
+        - --stream.source="tcp://0.0.0.0:7779?name=bluetooth-2&mode=server&sampleformat=44100:16:2"
         - --logging.filter="*:warning"
         ports:
         - containerPort: 1704
           name: snapcast-stream
         - containerPort: 1705
           name: snapcast-ctrl
+        - containerPort: 7778
+          name: snapcast-bt-1
+        - containerPort: 7779
+          name: snapcast-bt-2
       securityContext:
         runAsNonRoot: true
         runAsUser: 100 # mopidy

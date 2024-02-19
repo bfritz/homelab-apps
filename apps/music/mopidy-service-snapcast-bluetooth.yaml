@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+    metallb.universe.tf/allow-shared-ip: private-main
+  labels:
+    app.kubernetes.io/name: mopidy
+  name: mopidy-snapcast-bt-1
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 172.22.18.32
+  ports:
+  - name: snapcast-bt-1
+    port: 31778
+    targetPort: snapcast-bt-1
+  selector:
+    app.kubernetes.io/name: mopidy
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    metallb.universe.tf/address-pool: private-pool
+    metallb.universe.tf/allow-shared-ip: private-main
+  labels:
+    app.kubernetes.io/name: mopidy
+  name: mopidy-snapcast-bt-2
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 172.22.18.32
+  ports:
+  - name: snapcast-bt-2
+    port: 31779
+    targetPort: snapcast-bt-2
+  selector:
+    app.kubernetes.io/name: mopidy
