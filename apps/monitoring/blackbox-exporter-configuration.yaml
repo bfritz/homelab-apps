@@ -15,6 +15,12 @@ data:
           "method": "POST"
           "preferred_ip_protocol": "ip4"
         "prober": "http"
+      http_401:
+        http:
+          preferred_ip_protocol: "ip4"
+          valid_status_codes:
+            - 401
+        prober: http
       "irc_banner":
         "prober": "tcp"
         "tcp":
