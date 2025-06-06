@@ -1,27 +1,21 @@
 - job_name: external-nodes
   scrape_interval: 30s
   metrics_path: /metrics
-  static_configs:
-  - targets:
-    - rpi-fw:9100
-    - mail.fewerhassles.com:9100
-    - mail.fewerhassles.com:9154
-    - k0s-controller.k8s:9100
-    - nas:9100
-    - ruuvi-bridge:9100
-    - snapcast-client:9100
-    labels:
-      job: node-exporter
-      k8s: "false"
+  dns_sd_configs:
+  - type: SRV
+    names: ['_node-exporter._tcp.carmel.']
+    refresh_interval: 5m
   relabel_configs:
-  # Keeps explicit `instance`, e.g. from file_sd_configs, but drops port from auto-created `instance` values.
-  # Copied from https://stackoverflow.com/a/63414542 .
-  - source_labels: [instance]
-    target_label: __tmp_instance
-    regex: '(.+)'
-    replacement: '${1};'
-  - source_labels: [__tmp_instance, __address__]
-    separator: ''
+  # set `instance` label to the hostname without trailing period in FQDN
+  - source_labels: [__meta_dns_srv_record_target]
     target_label: instance
-    regex: '([^:;]+)((:[0-9]+)?|;(.*))'
+    regex: '(.+[^.]).?'
     replacement: '${1}'
+  # always set `k8s` label to `false`
+  - source_labels: []
+    target_label: k8s
+    replacement: 'false'
+  # always set `job` label to `node-exporter`
+  - source_labels: []
+    target_label: job
+    replacement: node-exporter
