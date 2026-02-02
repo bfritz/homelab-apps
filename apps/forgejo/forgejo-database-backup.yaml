@@ -1,0 +1,106 @@
+# hourly `pgdump` backup of forgejo database to NAS volume
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: forgejo-db-backup
+spec:
+  schedule: "3 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 600
+  failedJobsHistoryLimit: 10
+  successfulJobsHistoryLimit: 36
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 1200
+      template:
+        spec:
+          containers:
+          - name: forgejo-db-backup
+            image: library/postgres:18-alpine
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            args:
+            - -c
+            - umask 0177 ; mkdir -p /backup/forgejo > /dev/null 2>&1 ; /usr/local/bin/pg_dump > /backup/forgejo/pgdump_$(date -u +%H).sql
+            env:
+            # pull the database connection properties from CNPG-generated database secret
+            - name: PGDATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-app
+                  key: dbname
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-app
+                  key: user
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-app
+                  key: password
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-app
+                  key: host
+            - name: PGPORT
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-app
+                  key: port
+            - name: PGSSLMODE
+              value: verify-ca
+            - name: PGSSLROOTCERT
+              value: "/etc/certs/pg/ca.crt"
+            volumeMounts:
+              - name: forgejo-db-backup
+                mountPath: /backup
+              - name: forgejo-db-ca-cert
+                mountPath: /etc/certs/pg
+                readOnly: true
+          volumes:
+          - name: forgejo-db-backup
+            persistentVolumeClaim:
+              claimName: forgejo-db-backup
+          - name: forgejo-db-ca-cert
+            secret:
+              items:
+              # only mounting `ca.crt` since there's also a `ca.key` that should not be exposed to the forgejo app pod
+              - key: ca.crt
+                mode: 444
+                path: ca.crt
+              secretName: forgejo-ca
+          restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: forgejo-db-backup
+  labels:
+    name: forgejo-db-backup
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: nas
+    path: "/storage/k8s/nfs/pg/backup"
+  mountOptions:
+    - nfsvers=4.2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: forgejo-db-backup
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    matchLabels:
+      name: forgejo-db-backup

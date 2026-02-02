@@ -1,0 +1,75 @@
+image:
+  rootless: true
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-ca
+  className: haproxy-private
+  hosts:
+  - host: forgejo.k8s
+    paths:
+    - path: /
+      pathType: Prefix
+      port: http
+  tls:
+  - secretName: forgejo-tls
+    hosts:
+    - forgejo.k8s
+persistence:
+  enabled: true
+  claimName: forgejo-data
+  volumeName: forgejo-data
+  size: 20Gi
+podSecurityContext:
+  fsGroup: 2550
+containerSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 2550
+  runAsGroup: 2550
+service:
+  ssh:
+    annotations:
+      metallb.universe.tf/address-pool: private-pool
+      metallb.universe.tf/allow-shared-ip: private-main
+    type: LoadBalancer
+    loadBalancerIP: 172.22.18.32
+gitea:
+  additionalConfigFromEnvs:
+  - name: FORGEJO__DATABASE__HOST
+    valueFrom:
+      secretKeyRef:
+        name: forgejo-app
+        key: host
+  - name: FORGEJO__DATABASE__NAME
+    valueFrom:
+      secretKeyRef:
+        name: forgejo-app
+        key: dbname
+  - name: FORGEJO__DATABASE__USER
+    valueFrom:
+      secretKeyRef:
+        name: forgejo-app
+        key: user
+  - name: FORGEJO__DATABASE__PASSWD
+    valueFrom:
+      secretKeyRef:
+        name: forgejo-app
+        key: password
+  admin:
+    existingSecret: forgejo-admin
+    email: s-forgejo-local@bfritz.com
+  config:
+    database:
+      DB_TYPE: postgres
+    log:
+      LEVEL: Info
+      # LOGGER_SSH_MODE: console
+    migrations:
+      ALLOWED_DOMAINS: gitlab.k8s
+      SKIP_TLS_VERIFY: "true" # temporary and easier than adding cluster-ca cert to trusted certs
+    server:
+      BUILTIN_SSH_SERVER_USER: git
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

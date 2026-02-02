@@ -1,0 +1,54 @@
+# 10gb data volume on node with `db=true` label
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: forgejo-db-volume
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /data/k8s/cnpg/forgejo
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: db
+          operator: In
+          values:
+          - "true"
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: forgejo
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.1-202601190807-standard-trixie@sha256:7a72106d396a9c6d06ca25be191700c86031e0a06ccdeaf1a31da14f198cbbc4
+
+  affinity:
+    nodeSelector:
+      db: "true"
+
+  storage:
+    pvcTemplate:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 10Gi
+      volumeName: forgejo-db-volume
+      volumeMode: Filesystem
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: forgejo-postgres
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: forgejo
+  podMetricsEndpoints:
+  - port: metrics
