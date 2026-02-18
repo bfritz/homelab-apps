@@ -6,7 +6,7 @@ metadata:
 spec:
   generators:
   - git:
-      repoURL: https://gitlab.k8s/infra/homelab-apps-extra.git
+      repoURL: https://forgejo.k8s/infra/homelab-apps-extra.git
       revision: HEAD
       directories:
       - path: apps/*
@@ -19,7 +19,7 @@ spec:
         namespace: '{{path.basename}}'
         server: https://kubernetes.default.svc
       source:
-        repoURL: https://gitlab.k8s/infra/homelab-apps-extra.git
+        repoURL: https://forgejo.k8s/infra/homelab-apps-extra.git
         targetRevision: HEAD
         path: '{{path}}'
       syncPolicy:

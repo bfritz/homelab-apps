@@ -45,11 +45,11 @@ extract_certs:
         | base64 -d \
         | awk 'split_after==1{n++;split_after=0} /-----END CERTIFICATE-----/ {split_after=1} { print > "{{tmpdir}}/cert" n ".pem"}'
 
-# Configure ArgoCD to trust gitlab.k8s server certificate
-argocd_trust_gitlab_cert: extract_certs
+# Configure ArgoCD to trust forgejo.k8s server certificate
+argocd_trust_forgejo_cert: extract_certs
     -kubectl delete configmap -n argocd argocd-tls-certs-cm
     kubectl create configmap -n argocd argocd-tls-certs-cm \
-        --from-file=gitlab.k8s={{tmpdir}}/cert1.pem
+        --from-file=forgejo.k8s={{tmpdir}}/cert1.pem
 
 # Use $SOPS_AGE_KEY to decrypt all .enc files and apply to kubernetes
 sops_apply_secrets:
