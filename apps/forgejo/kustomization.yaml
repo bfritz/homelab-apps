@@ -14,4 +14,4 @@ resources:
 
 images:
   - name: code.forgejo.org/forgejo/forgejo
-    digest: sha256:3e029a822dc9aaa67934dbe670e2d8e584adcbe13cc199336b6bdf8b1deb6b88 # 14.0.2-rootless
+    digest: sha256:3bde16a366e57f37c09599b77ceb83ed05b1934f8224072f8140bc66cf243608 # 14.0.3-rootless
