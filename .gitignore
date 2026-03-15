@@ -1,1 +1,3 @@
 *.sensitive
+Chart.lock
+charts/
