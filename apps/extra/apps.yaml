@@ -10,6 +10,9 @@ spec:
       revision: HEAD
       directories:
       - path: apps/*
+      - path: apps/web/*
+      - path: apps/web/base
+        exclude: true
   template:
     metadata:
       name: 'extra-{{path.basename}}'
