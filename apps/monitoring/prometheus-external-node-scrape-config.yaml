@@ -1,0 +1,30 @@
+# Configure Prometheus to run a DNS SRV request for
+# `_node-exporter._tcp.carmel.` to find a list of node-exporter
+# endpoints to scrape.
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: external-nodes
+  namespace: monitoring
+spec:
+  dnsSDConfigs:
+    - type: SRV
+      names:
+        - _node-exporter._tcp.carmel.
+      refreshInterval: 5m
+  metricsPath: /metrics
+  scrapeInterval: 30s
+  relabelings:
+    # set `instance` label to the hostname without trailing period in FQDN
+    - sourceLabels: [__meta_dns_srv_record_target]
+      targetLabel: instance
+      regex: '(.+[^.]).?'
+      replacement: '${1}'
+    # always set `k8s` label to `false`
+    - sourceLabels: []
+      targetLabel: k8s
+      replacement: 'false'
+    # always set `job` label to `node-exporter`
+    - sourceLabels: []
+      targetLabel: job
+      replacement: node-exporter

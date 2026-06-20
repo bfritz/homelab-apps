@@ -18,7 +18,6 @@ resources:
   - ./prometheus-haproxy-ingress-servicemonitor.yaml
   - ./prometheus-ingress.yaml
   - ./prometheus-storage.yaml
-  - ./prometheus_extra/additional-scrape-configs.yaml
 
 images:
   - name: kiwigrid/k8s-sidecar
@@ -43,6 +42,8 @@ patches:
         namespace: monitoring
       spec:
         replicas: 1
+        scrapeConfigSelector:
+          matchLabels: {}
 
   # configure additional scrape targets for prometheus server
   - patch: |-
