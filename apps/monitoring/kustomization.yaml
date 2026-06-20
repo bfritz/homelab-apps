@@ -25,6 +25,15 @@ images:
     digest: sha256:2029752d7596ec30b65f1ce07bad9af1cdbb6cf7013fcc1f5720f4bf7c4b61e1 # 1.15.4
 
 patches:
+  # use server-side apply for CRDs
+  - patch: |-
+      - op: add
+        path: /metadata/annotations
+        value:
+          argocd.argoproj.io/sync-options: ServerSideApply=true
+    target:
+      kind: CustomResourceDefinition
+
   # configure single replica for prometheus server
   - patch: |-
       apiVersion: monitoring.coreos.com/v1
