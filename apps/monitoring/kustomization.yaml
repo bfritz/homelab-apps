@@ -5,6 +5,7 @@ metadata:
 
 resources:
   - ./vendor/kube-prometheus/
+  - ./alertmanager-config-primary.yaml
   - ./alertmanager-ingress.yaml
   - ./grafana-dashboards-app.yaml
   - ./grafana-ingress.yaml
@@ -67,13 +68,8 @@ patches:
       spec:
         alertmanagerConfigSelector:
           matchLabels:
-            alertmanagerConfig: active
+            alertmanagerConfig: main
         externalUrl: https://alertmanager.k8s
-
-  - path: alertmanager-config-secret.yaml
-    target:
-      name: alertmanager-main
-      kind: Secret
 
   - patch: |-
       apiVersion: apps/v1

@@ -1,0 +1,80 @@
+# Configure Alertmanager to send email for alerts.
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: alertmanager-config-primary
+  namespace: monitoring
+  labels:
+    alertmanagerConfig: main
+spec:
+  route:
+    receiver: Default
+    groupBy:
+      - namespace
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+    routes:
+      - receiver: Watchdog
+        matchers:
+          - name: "alertname"
+            matchType: "="
+            value: "Watchdog"
+      - receiver: "null"
+        matchers:
+          - name: "alertname"
+            matchType: "="
+            value: "InfoInhibitor"
+      - receiver: Critical
+        matchers:
+          - name: "severity"
+            matchType: "="
+            value: "critical"
+  inhibitRules:
+    - targetMatch:
+        - name: severity
+          matchType: "="
+          value: "warning|info"
+      sourceMatch:
+        - name: severity
+          matchType: "="
+          value: "critical"
+      equal:
+        - alertname
+        - namespace
+    - targetMatch:
+        - name: severity
+          matchType: "="
+          value: "info"
+      sourceMatch:
+        - name: severity
+          matchType: "="
+          value: "warning"
+      equal:
+        - alertname
+        - namespace
+    - targetMatch:
+        - name: severity
+          matchType: "="
+          value: "info"
+      sourceMatch:
+        - name: severity
+          matchType: "="
+          value: "InfoInhibitor"
+      equal:
+        - namespace
+  receivers:
+    - name: Default
+      emailConfigs:
+        - to: Brad <brad-k8s-alerts-77rC@fewerhassles.com>
+          from: Alertmanager <alertmanager@alertmanager.k8s>
+          smarthost: mail.fewerhassles.com:587
+          sendResolved: true
+    - name: "null"
+    - name: Watchdog
+    - name: Critical
+      emailConfigs:
+        - to: Brad <brad-k8s-alerts-77rC@fewerhassles.com>
+          from: Alertmanager <alertmanager@alertmanager.k8s>
+          smarthost: mail.fewerhassles.com:587
+          sendResolved: true
