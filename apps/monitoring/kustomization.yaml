@@ -222,6 +222,11 @@ patches:
                 capabilities:
                   drop: ["ALL"]
                   add: ["NET_RAW"]
+            - name: kube-rbac-proxy
+              # bump CPU allotment for RBAC proxy and blackbox-exporter to avoid throttling (and Alertmanager alerts)
+              resources:
+                limits:
+                  cpu: 60m
 
   # add supplemental grafana dashboard provider for ConfigMap backed dashboards
   - path: grafana-dashboards-configuration.yaml
