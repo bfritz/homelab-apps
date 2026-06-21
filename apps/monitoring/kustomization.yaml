@@ -54,9 +54,6 @@ patches:
         name: k8s
         namespace: monitoring
       spec:
-        additionalScrapeConfigs:
-          name: additional-scrape-configs
-          key: prometheus-additional.yaml
         externalUrl: https://prometheus.k8s
 
   - patch: |-
