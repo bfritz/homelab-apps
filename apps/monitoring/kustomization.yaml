@@ -9,7 +9,7 @@ resources:
   - ./alertmanager-ingress.yaml
   - ./grafana-dashboards-app.yaml
   - ./grafana-ingress.yaml
-  - ./grafana-monitoring-dashboards-view-role.yaml
+  - ./grafana-dashboards-view-role.yaml
   - ./grafana-notifiers-brad.yaml
   - ./grafana-rolebinding.yaml
   - ./probes-internal-ips.yaml
