@@ -62,6 +62,12 @@ patches:
         name: main
         namespace: monitoring
       spec:
+        # Prevent the automatic addition of a namespace matcher to `AlertmanagerConfig` routes.
+        # Without this, an AlertmanagerConfig in the `monitoring` namespace will only ever match
+        # alerts from workloads in the `monitoring` namespace.
+        # See https://github.com/prometheus-operator/prometheus-operator/discussions/3733#discussioncomment-8237810
+        alertmanagerConfigMatcherStrategy:
+          type: None
         alertmanagerConfigSelector:
           matchLabels:
             alertmanagerConfig: main
