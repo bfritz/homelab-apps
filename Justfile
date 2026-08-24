@@ -1,5 +1,3 @@
-# List recipes
-
 tmpdir := `mktemp -d`
 
 # List all recipes

@@ -16,6 +16,7 @@ resources:
   - ./probes-key-public-ips.yaml
   - ./probes-public-http-endpoints.yaml
   - ./prometheus-ingress.yaml
+  - ./prometheus-node-exporter-rules.yaml
   - ./prometheus-rolebinding.yaml
   - ./prometheus-storage.yaml
 
@@ -72,6 +73,18 @@ patches:
           matchLabels:
             alertmanagerConfig: main
         externalUrl: https://alertmanager.k8s
+
+  # Use a locally modified copy of `node-exporter-rules` instead of the exact upstream version.
+  - patch: |-
+      apiVersion: monitoring.coreos.com/v1
+      kind: PrometheusRule
+      metadata:
+        name: node-exporter-rules
+        namespace: monitoring
+      $patch: delete
+    target:
+      kind: PrometheusRule
+      name: node-exporter-rules
 
   - patch: |-
       apiVersion: apps/v1

@@ -1,0 +1,9 @@
+# List all recipes
+@default:
+    just --list
+
+integrate_node_exporter_rule_updates:
+    cp -pi \
+        vendor/kube-prometheus/manifests/nodeExporter-prometheusRule.yaml \
+        prometheus-node-exporter-rules.yaml
+    echo "Copied node-exporter rules. Recommend running 'git checkout --patch' to restore local changes."
