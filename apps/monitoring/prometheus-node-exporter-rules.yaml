@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/version: 1.9.1
     prometheus: k8s
     role: alert-rules
-  name: node-exporter-rules
+  name: node-exporter-rules-customized
   namespace: monitoring
 spec:
   groups:
@@ -289,8 +289,19 @@ spec:
           Memory is filling up at {{ $labels.instance }}, has been above 90% for the last 15 minutes, is currently at {{ printf "%.2f" $value }}%.
         runbook_url: https://runbooks.prometheus-operator.dev/runbooks/node/nodememoryhighutilization
         summary: Host is running out of memory.
+      # Modified from upstream to allow ZFS nodes to use more RAM before alerting.
+      # The ZFS ARC is aggressive by default, for good reason, and the `zfs_arc_min`
+      # value could easily be less than 5% of a node's available RAM.
+      # See https://openzfs.github.io/openzfs-docs/Performance%20and%20Tuning/Module%20Parameters.html#zfs-arc-min
       expr: |
-        100 - (node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"} * 100) > 90
+        100 - (node_memory_MemAvailable_bytes{job="node-exporter"} / node_memory_MemTotal_bytes{job="node-exporter"} * 100) >
+        (
+          # ZFS nodes get a 96% threshold
+          (node_zfs_arc_size{job="node-exporter"} * 0 + 96)
+          or
+          # All other nodes fall back to the default of 90%
+          (node_memory_MemTotal_bytes{job="node-exporter"} * 0 + 90)
+        )
       for: 15m
       labels:
         severity: warning
