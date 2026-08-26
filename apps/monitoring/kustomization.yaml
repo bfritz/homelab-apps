@@ -16,6 +16,7 @@ resources:
   - ./probes-key-public-ips.yaml
   - ./probes-public-http-endpoints.yaml
   - ./prometheus-ingress.yaml
+  - ./prometheus-k0s-system-service-monitor.yaml
   - ./prometheus-node-exporter-rules.yaml
   - ./prometheus-rolebinding.yaml
   - ./prometheus-storage.yaml

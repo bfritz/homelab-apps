@@ -1,0 +1,16 @@
+# Configure prometheus to scrape metrics from the k0s system push gateway as described in
+# https://docs.k0sproject.io/v1.36.3+k0s.2/system-monitoring/#system-components-monitoring
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: k0s-system-components
+  namespace: k0s-system
+spec:
+  endpoints:
+  - port: http
+    honorLabels: true
+  selector:
+    matchLabels:
+      app: k0s-observability
+      component: pushgateway
+      k0s.k0sproject.io/stack: metrics
