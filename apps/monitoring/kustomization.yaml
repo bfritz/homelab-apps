@@ -16,6 +16,7 @@ resources:
   - ./probes-key-public-ips.yaml
   - ./probes-public-http-endpoints.yaml
   - ./prometheus-ingress.yaml
+  - ./prometheus-k8s-control-plane-rules.yaml
   - ./prometheus-k0s-system-service-monitor.yaml
   - ./prometheus-node-exporter-rules.yaml
   - ./prometheus-rolebinding.yaml
@@ -86,6 +87,18 @@ patches:
     target:
       kind: PrometheusRule
       name: node-exporter-rules
+
+  # Use a locally modified copy of `kubernetes-monitoring-rules` instead of the exact upstream version.
+  - patch: |-
+      apiVersion: monitoring.coreos.com/v1
+      kind: PrometheusRule
+      metadata:
+        name: kubernetes-monitoring-rules
+        namespace: monitoring
+      $patch: delete
+    target:
+      kind: PrometheusRule
+      name: kubernetes-monitoring-rules
 
   - patch: |-
       apiVersion: apps/v1

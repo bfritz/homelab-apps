@@ -7,3 +7,9 @@ integrate_node_exporter_rule_updates:
         vendor/kube-prometheus/manifests/nodeExporter-prometheusRule.yaml \
         prometheus-node-exporter-rules.yaml
     echo "Copied node-exporter rules. Recommend running 'git checkout --patch' to restore local changes."
+
+integrate_k8s_control_plane_rule_updates:
+    cp -pi \
+        vendor/kube-prometheus/manifests/kubernetesControlPlane-prometheusRule.yaml \
+        prometheus-k8s-control-plane-rules.yaml
+    echo "Copied k8s control plane rules. Recommend running 'git checkout --patch' to restore local changes."
