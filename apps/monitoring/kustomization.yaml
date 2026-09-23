@@ -247,6 +247,11 @@ patches:
         namespace: monitoring
       spec:
         retention: "30d"
+        resources:
+          requests:
+            memory: 4Gi
+          limits:
+            memory: 6Gi
         storage:
           volumeClaimTemplate:
             apiVersion: v1
